@@ -14,6 +14,7 @@
 
 % Graphics
 \usepackage{caption}
+\usepackage{float}
 \usepackage{subcaption}
 \usepackage{graphicx}
 \graphicspath{{img/}}
@@ -74,19 +75,25 @@
 
         \vspace{1cm}
 
+        \section*{Todo list}
+
+        \begin{enumerate}
+            \item 
+        \end{enumerate}
+
     \end{@twocolumnfalse}
 ]
 
 \ifnum \value{num}>0
     {
     \input{files/introduction.tex}
-    \input{files/biology.tex}
     \input{files/temporal.tex}
     \input{files/results.tex}
     }
 \else 
     {
     \input{sections/introduction.tex}
+    \input{sections/biology.tex}
     \input{sections/methodology.tex}
     \input{sections/visualization.tex}
     \input{sections/results.tex}
