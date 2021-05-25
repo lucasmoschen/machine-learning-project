@@ -1,0 +1,108 @@
+\documentclass[10pt, twocolumn]{article}
+
+%----------------------------------------------
+%-----------------Packages---------------------
+%----------------------------------------------
+
+% Writing 
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{lscape}
+\fontfamily{times}
+\usepackage[affil-it]{authblk}
+\usepackage{lettrine}
+
+% Graphics
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\graphicspath{{img/}}
+
+% Math
+\usepackage{amsthm, amssymb, amsmath, mathtools}
+
+% Biblio
+\usepackage[authoryear, round]{natbib}
+\bibliographystyle{apalike}
+
+%Others
+\usepackage{url}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=magenta]{hyperref}
+\usepackage{ifthen}
+
+%----------------------------------------------
+%---------------Math definitions---------------
+%----------------------------------------------
+
+\newcommand{\R}{\mathbb{R}}
+
+%----------------------------------------------
+%--------------Other definitions---------------
+%----------------------------------------------
+
+\newcommand{\com}[1]{\textcolor{red}{#1}}
+
+%----------------------------------------------
+%-----------------Title Page-------------------
+%----------------------------------------------
+
+\title{Machine Learning}
+
+\author{Lucas Machado Moschen}
+\affil{School of Applied Mathematics, \\ Fundação Getulio Vargas}
+
+\date{\today}
+
+%----------------------------------------------
+%------------------Document--------------------
+%----------------------------------------------
+
+
+\begin{document}
+
+\newcounter{num}
+\setcounter{num}{0}
+
+\twocolumn[
+    \begin{@twocolumnfalse}
+
+        \maketitle
+
+        \begin{abstract}
+            \input{sections/abstract.tex}
+        \end{abstract}
+
+        \vspace{1cm}
+
+    \end{@twocolumnfalse}
+]
+
+\ifnum \value{num}>0
+    {
+    \input{files/introduction.tex}
+    \input{files/biology.tex}
+    \input{files/temporal.tex}
+    \input{files/results.tex}
+    }
+\else 
+    {
+    \input{sections/introduction.tex}
+    \input{sections/methodology.tex}
+    \input{sections/visualization.tex}
+    \input{sections/results.tex}
+    }
+\fi
+
+    \newpage
+
+    %\appendix
+
+    %\newpage
+
+\twocolumn[
+    \begin{@twocolumnfalse}
+        \bibliography{sections/biblio} 
+    \end{@twocolumnfalse}
+]
+
+\end{document}
