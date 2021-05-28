@@ -1,26 +1,67 @@
 \section{Introduction}
+\label{sec:introduction}
 
-\lettrine[findent=2pt]{\textbf{R}}{}io de Janeiro city (Brazil) is one of the
-most beautiful cities in the world, according to the travel website Conde Nast
-Traveler \cite{travelRio}. This thought is shared among tourists and
-residents.
+\BL{A}ir quality is a growing concern and area
+of research, because most of the cities world-wide have been facing problems with it in
+the past few decades \cite{mayer1999}. The rapid increase of the urban
+population and the development of the cities is causing environmental
+pollution, what can give rise to damage on human health. 
 
-\begin{enumerate}
-    \item Environmental pollution is a consequence of the development of
-    cities and they can cause damage on human health. 
-    \item Fossil fuels, agriculture, industries, natural disasters are the main
-    causes of air pollution. 
-    \item The program MonitorAR exists since 2011. 
-    \item \com{Find data about deaths in Rio de Janeiro. }
-    \item What is your basic approach? : This study aims to build models for hourly/daily air quality
-    forecasting for the city of Rio de Janeiro, using the algorithms XXX and
-    YYY.
-    \item The text is organized as follows...
-\end{enumerate}
+The emission and
+transmission of air pollutants, such as, Nitrogen dioxide (NO$_2$), Carbon
+monoxide (CO), Ozone (O$_3$)
+and Particulate Matter (PM), results in the ambient air pollution, which can be
+caused by different factors. The World Health
+Organization (WHO) explained \cite{who2006} that PM, O$_3$, and NO$_2$ have, respectively, the
+strongest effects on health of air quality. 
+
+In Rio de Janeiro city, the city hall recognized the problem and created the
+Program MonitorAr-Rio in 2008 \cite{relatorio2011}. The objective was to
+monitor the air quality in the city and inform the results to the population.
+Eight fixed stations monitor the main pollutants defined in the legislation,
+and some meterological conditions. 
+
+It is important to have updated knowledge and accurate predictions of the
+air pollutants, in order to help the formulation of public health and
+environmental policies. This study proposes models for hourly/daily air
+quality forecasting for the city of Rio de Janeiro, using the algorithms XXX
+and XXX. 
+
+The text is organized as follows. Section \ref{sec:problem-definition} defines
+the problem clearly and mathematically. Section \ref{sec:background} gives a
+background on the topic of air quality and air pollution. Section \ref{sec:methodology} presents
+the methodology of the work. We present an exploratory data analysis with the
+data path in Section \ref{sec:eda}. Section \ref{sec:experiments} presents the
+methods used and the experiments related to each one. Sections
+\ref{sec:results}, \ref{sec:discussion}, and \ref{sec:conclusion} presents the
+results and concludes it. 
+
 
 \section{Problem definition}
+\label{sec:problem-definition}
 
-\begin{enumerate}
-    \item What is the problem?
-    \item What are the inputs and outputs mathematically. 
-\end{enumerate}
+\BL We want to produce time predictions of some pollutants for the Rio de Janeiro
+city, considering the weather, location, and time variables. We also want to
+develop a method for estimating the air quality of not monitored regions by
+the program based on the monitored ones.
+
+Let $Y_i$ be the random
+variable indicating the quantity of i$^{th}$ pollutant measured in a specific
+monitoring station, for instance, the quantity of ozone. If $\bb{X} \in \mathcal{X}
+\subseteq \R^{p}$ is the random vector of meterological conditions measured,
+$t$ is the time of measurement, and $s_1, ..., s_8$ the positions of the
+monitoring stations, we have that 
+\begin{equation}
+    \label{eq:problem definition}
+    Y_i = f_i(t, s_k, \bb{X}) + \epsilon_{t,s_k,i}
+\end{equation}
+where $\epsilon_{t,s,i}$ is a random variable with mean zero. After
+observing, for $t_1 < ... < t_n$,  
+$$y_i^{t_1,s}, ..., y_i^{t_n,s}$$ 
+and 
+$$
+\bb{x}^{t_1,s}, ..., \bb{x}^{t_n,s},
+$$
+we want to make predictions $y_i^{\bar{t},s}$ for $\bar{t} > t_{n+1}$. We also want to
+predict $y_i^{t, \tilde{s}}$ for $\tilde{s}$ different of $s_k$, for $k =
+1,...,8$. 

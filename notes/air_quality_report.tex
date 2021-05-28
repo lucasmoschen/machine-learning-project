@@ -38,12 +38,16 @@
 %----------------------------------------------
 
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\bb}[1]{\boldsymbol{#1}}
+
 
 %----------------------------------------------
 %--------------Other definitions---------------
 %----------------------------------------------
 
 \newcommand{\com}[1]{\textcolor{red}{#1}}
+\newcommand{\BL}[1]{\lettrine{\textbf{#1}}{}}
+
 
 %----------------------------------------------
 %-----------------Title Page-------------------
@@ -77,12 +81,6 @@
 
         \vspace{1cm}
 
-        \section*{Todo list}
-
-        \begin{enumerate}
-            \item 
-        \end{enumerate}
-
     \end{@twocolumnfalse}
 ]
 
@@ -97,10 +95,31 @@
     \input{sections/introduction.tex}
     \input{sections/biology.tex}
     \input{sections/methodology.tex}
-    \input{sections/visualization.tex}
+    \input{sections/data_analysis.tex}
+    \input{sections/experiments.tex}
     \input{sections/results.tex}
     }
 \fi
+
+\newpage
+
+\section*{Métodos estudados no curso}
+
+\begin{enumerate}
+    \item Regressão Linear
+    \item Regressão Logística 
+    \item Análise de discriminante linear 
+    \item KNN
+    \item Validação cruzada 
+    \item Bootstrap
+    \item Regularização Ridge e Lasso
+    \item Árvore de Regressão, Bagging, Random Forest, Boosting 
+    \item Support Vector Machine
+    \item PCA 
+    \item Métodos de clusterização. 
+    \item Mistura Gaussiana.
+    \item Redes neurais
+\end{enumerate}
 
     \newpage
 

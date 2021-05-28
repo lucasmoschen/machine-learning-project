@@ -1,4 +1,5 @@
 \section{Exploratory data analysis}
+\label{sec:eda}
 
 \subsection{Data description}
 
@@ -116,5 +117,29 @@ consider the data from this year.
     $$
     \text{hour\_sin} = \sin(2\pi \text{ hour}/24)
     $$
-    \item Create variable season.   
+    \item Create variable season. 
+    \item Visualize the series autocorrelation in order to define the number
+    of lag variables per pollutant and particle.
+    \item Complete the dataset with temporal variables.     
+    \item The number of features is XXX: lag features, roll mean features,
+    weekend, season, trigonometric  
 \end{enumerate}
+
+\subsubsection{Feature selection}
+
+In order to reduce the dimensionality of the feature space, from the XXX
+variables described, variable selection was performed. Filters are methods
+which perform feature selection, as well as embedding methods, although they
+depend on the machine learning algorithm chosen. 
+
+\begin{enumerate}
+    \item Pearson correlation-based filter to feature selection. Observe
+    correlation of the lag variables. 
+\end{enumerate}
+
+The objective of this work is generate different forecasting models for the
+pollutants A, B, C, and D. The maintained features in the dataset can be seen
+in Table XXX.
+
+\com{We applied PCA in order to reduce the dimensionality.}
+
