@@ -72,7 +72,10 @@ questions and concerns about high levels of pollutants in urban ambients,
 which caused several deaths and hospitalizations. The rapidly expanding
 populations and cities also increase the exposure to them.
 
-\com{Deaths caused in Brazil}
+In Brazil, in the last decade, more than 60,000 died on average per year due
+to air pollution \cite{data-deaths-air-pollution}. Household air pollution
+from solid fuels caused most of the cases, followed by ozone pollution, and
+particulate matter pollution. 
 
 \subsection{Air quality index}
 
@@ -82,7 +85,21 @@ Its divulgation is made through diary reports for each monitoring
 station\footnote{\url{http://jeap.rio.rj.gov.br/je-metinfosmac/boletim}} as
 shown in Figure \ref{fig:boletim}. 
 
-\com{How is it calculated? Present the five levels}
+The index considers the pollutants PM$_{10}$, PM$_{2.5}$, O$_3$,
+CO, NO$_2$, and SO$_2$. For each one, The AQIr is calculated as follows,
+\begin{equation}
+    \label{eq:AQI}
+    AQIr = I_{ini} + \frac{I_{fin} - I_{ini}}{C_{fin} - C_{ini}} \times (C - C_{ini}), 
+\end{equation}
+such that $I_{ini}$ ($I_{fin}$) is the value of the index that corresponds to
+the initial (final) concentration of the range; $C_{ini}$ ($C_{fin}$) is the
+initial (final) concentration of the range in which the measured concentration
+is located, and $C$ is the concentration measured. The value informed is the
+maximum $AQIr$ of the pollutants. 
+
+After calculating the AIQ, we classify air quality at five levels: N1 (0-40),
+N2 (41-80), N3 (81-120), N4 (121-200), and N5 ($>$ 200). For more details,
+consult the technical guide from the Ministry of the Environment \cite{guia-tecnico-mma}. 
 
 \begin{figure*}[!ht]  
     \includegraphics[width=\linewidth]{../images/boletim01-03-2018.png}
