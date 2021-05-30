@@ -3,20 +3,42 @@
 
 \subsection{Data description}
 
-The dataset used in this study was extracted from the project MonitorAr
+\BL{T}he dataset used in this study was extracted from the project MonitorAr-Rio
 \cite{dataset-rio-ar-quality}. The table contains hourly data observations, separated by
 pollutant, weather condition, and monitoring stations' characteristics from
 the city of Rio de Janeiro. Table
 \ref{tab:measured-data} informs the most important variables used, and Table
-\ref{tab:pollutants-measured} indicates the measured pollutants. The events were collected between January 1,
+\ref{tab:pollutants-measured} indicates the measured pollutants per monitoring
+station. The events were collected between January 1,
 2011,
-and March 31, 2021. A total of 661,662 records were used. 
+and March 31, 2021. A total of 661,662 records were used.
+
+We count the missing values for each of the main variables used in this work
+and present them in Table \ref{tab:missing-values}. We observe that some
+meterological variables have more than 10\% of missing values, what is a lot.
+The CO gas has more missing values than the other gases, because Pedra de
+Guaratiba does not measure it. If we disconsider this kind of absent values,
+CO has around 6\%. Imputation methods to handle this problem in Section
+\ref{sec:data-preprocessing}.
+
+It is also noticed that almost 91\% of the values in ``Chuva'' column and 26\%
+of ``RS'' column are zero. If we consider the accumulated monthly amount of
+rain, the value seems to make sense and it is comparable to other sources,
+therefore we kept it. 
+
+We did not observe any pattern of missing values per year or per monitoring
+station. In 2012, over half of the wind information is missing, however other
+features are stable. However, after 2016, UR dominates the number of absent
+data. If we aggregate by time (hour, day, month, and year), and sum up the
+values of the features of each station, we do not observe missing values. This
+imply we can use information of other stations to impute data whenever
+necessary. 
 
 \begin{table*}[t]
     \centering
     \begin{tabular}{c|c|c|c|}
         \cline{2-4}
-                                                                                 & \textbf{Name} & \textbf{Type} & \textbf{Description}              \\ \hline
+       & \textbf{Name} & \textbf{Type} & \textbf{Description}              \\ \hline
         \multicolumn{1}{|c|}{\multirow{7}{*}{\textbf{Meterological conditions}}} & Chuva         & float         & Rainfall (mm)                     \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Pres          & float         & Atmospheric Pressure (mbar)       \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & RS            & float         & Solar radiation (w/m2)            \\ \cline{2-4} 
@@ -34,7 +56,7 @@ and March 31, 2021. A total of 661,662 records were used.
     \label{tab:measured-data}
 \end{table*}
 
-\begin{table*}[b]
+\begin{table*}[t]
     \centering
     \begin{tabular}{|c|c|}
     \hline
@@ -52,9 +74,29 @@ and March 31, 2021. A total of 661,662 records were used.
     \label{tab:pollutants-measured}
 \end{table*}
 
-\begin{enumerate}
-    \item Reportar valores nulos da chuva e índice de missing values
-\end{enumerate}
+\begin{table}
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        {\bf Variable} & {\bf Missing values} \\\hline
+        Data      &        0 (0.0 \%) \\\hline
+        CodNum    &        0 (0.0 \%) \\\hline
+        Lat       &        0 (0.0 \%) \\\hline
+        Lon       &        0 (0.0 \%) \\\hline
+        Chuva     &   15812 (2.38 \%) \\\hline
+        Pres      &   15294 (2.31 \%) \\\hline
+        RS        &   48260 (7.29 \%) \\\hline
+        Temp      &   70617 (10.6 \%) \\\hline
+        UR        &  110619 (16.7 \%) \\\hline
+        Dir\_Vento &   90498 (13.6 \%) \\\hline
+        Vel\_Vento &   90743 (13.7 \%) \\\hline
+        CO        &  114179 (17.2 \%) \\\hline
+        O3        &   37133 (5.61 \%) \\\hline
+        PM10      &   36142 (5.46 \%) \\\hline
+    \end{tabular}
+    \caption{Missing data in absolute and proportional values of the main variables.}
+    \label{tab:missing-values}    
+\end{table}
 
 \begin{enumerate}
     \item Gráficos dos gases e interpretação de alguns deles. Analisar curtose
@@ -65,6 +107,7 @@ and March 31, 2021. A total of 661,662 records were used.
 \end{enumerate}
 
 \subsection{Data preprocessing}
+\label{sec:data-preprocessing}
 
 The data preprocessing is an important step before the usage of machine
 learning algorithms, in order to report robust and neat results. 
