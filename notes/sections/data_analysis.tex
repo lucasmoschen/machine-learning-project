@@ -21,8 +21,8 @@ Guaratiba does not measure it. If we disconsider this kind of absent values,
 CO has around 6\%. Imputation methods to handle this problem in Section
 \ref{sec:data-preprocessing}.
 
-It is also noticed that almost 91\% of the values in ``Chuva'' column and 26\%
-of ``RS'' column are zero. If we consider the accumulated monthly amount of
+It is also noticed that almost 91\% of the values in {\tt Chuva} column and 26\%
+of {\tt RS} column are zero. If we consider the accumulated monthly amount of
 rain, the value seems to make sense and it is comparable to other sources,
 therefore we kept it. 
 
@@ -30,8 +30,8 @@ We did not observe any pattern of missing values per year or per monitoring
 station. In 2012, over half of the wind information is missing, however other
 features are stable. However, after 2016, UR dominates the number of absent
 data. If we aggregate by time (hour, day, month, and year), and sum up the
-values of the features of each station, we do not observe missing values. This
-imply we can use information of other stations to impute data whenever
+values of the features of each station, we observe little missing data. This
+implies we can use information of other stations to impute data whenever
 necessary. 
 
 \begin{table*}[t]
@@ -47,7 +47,7 @@ necessary.
         \multicolumn{1}{|c|}{}                                                   & Dir\_Vento    & float         & Wind direction (°)                \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Vel\_Vento    & float         & Wind speed (m/s)                  \\ \hline
         \multicolumn{1}{|c|}{\multirow{5}{*}{\textbf{Measurement conditions}}}   & Data          & datetime      & Measurement date and hour         \\ \cline{2-4} 
-        \multicolumn{1}{|c|}{}                                                   & CodNum        & ineger        & Number of the monitoring station  \\ \cline{2-4} 
+        \multicolumn{1}{|c|}{}                                                   & CodNum        & integer        & Number of the monitoring station  \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Estação       & string        & Name of the monitoring station    \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Lat           & float         & Latitude position of the station  \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Lon           & float         & Longitude position of the station \\ \hline
@@ -74,15 +74,18 @@ necessary.
     \label{tab:pollutants-measured}
 \end{table*}
 
+\begin{figure*}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{time-plots-gases.eps}
+    \caption{Time series with diary average levels.}
+    \label{fig:time-series-gases}
+\end{figure*}
+
 \begin{table}
     \centering
     \begin{tabular}{|c|c|}
         \hline
         {\bf Variable} & {\bf Missing values} \\\hline
-        Data      &        0 (0.0 \%) \\\hline
-        CodNum    &        0 (0.0 \%) \\\hline
-        Lat       &        0 (0.0 \%) \\\hline
-        Lon       &        0 (0.0 \%) \\\hline
         Chuva     &   15812 (2.38 \%) \\\hline
         Pres      &   15294 (2.31 \%) \\\hline
         RS        &   48260 (7.29 \%) \\\hline
@@ -94,17 +97,106 @@ necessary.
         O3        &   37133 (5.61 \%) \\\hline
         PM10      &   36142 (5.46 \%) \\\hline
     \end{tabular}
-    \caption{Missing data in absolute and proportional values of the main variables.}
+    \caption{Missing data in absolute and proportional values of the main variables. Data, CodNum, Lat, and Lon do not have nan values.}
     \label{tab:missing-values}    
 \end{table}
 
-\begin{enumerate}
-    \item Gráficos dos gases e interpretação de alguns deles. Analisar curtose
-    e assimetria.
-    \item Mensurações temporais de alguns gases. Selecionar alguns poucos
-    \item Testes de estacionariedade nas séries utilizadas. 
-    \item Mais alguns gráficos de visualização. 
-\end{enumerate}
+We see the summary statistics of the variables in Table
+\ref{tab:statistics-variables}. The high skewness and kurtosis from {\tt
+Chuva} column reaffirm we have heavy tails, or outliers. We can say the same
+for {\tt Press}. This is interesting because, it is common to see days with
+extreme values in meterological variables. In particular, the only hours with
+precipitation greater than 100 mm were in May 2020 in Tijuca, what is
+confirmed by weather references \cite{climatempo}. CO and PM$_{10}$ have high
+kurtosis also, so we shall give an attention for outliers too. 
+
+\begin{table*}[t]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        {} & {\bf Chuva} &  {\bf Pres} & {\bf RS} & {\bf Temp} & {\bf UR} &
+        {\bf Dir} & {\bf Vel} & {\bf CO} & {\bf O3} & {\bf PM10} \\
+        \hline
+        {\bf Mean}  &       0.13 &    1014.65 &     152.82 &      26.12 &      70.90
+        &     163.73 &       1.21 &       0.34 &      31.98 &      36.91 \\
+        \hline
+        {\bf Std}   &       1.64 &       5.68 &     244.37 &       4.90 &      18.35
+        &      73.45 &       1.00 &       0.28 &      29.81 &      23.52 \\
+        \hline
+        {\bf Min}   &       0.00 &     800.00 &       0.00 &       0.00 &       0.00
+        &       0.00 &       0.00 &       0.00 &       0.00 &       0.00 \\
+        \hline
+        {\bf 25\%}   &       0.00 &    1011.12 &       0.00 &      22.67 &
+        58.39 &     100.00 &       0.55 &       0.14 &       8.68 &      21.00
+        \\
+        \hline
+        {\bf 50\%}   &       0.00 &    1014.30 &       6.17 &      25.54 &
+        72.75 &     166.17 &       0.92 &       0.29 &      24.52 &      32.00
+        \\
+        \hline
+        {\bf 75\%}   &       0.00 &    1018.02 &     224.00 &      28.99 &
+        85.08 &     222.50 &       1.55 &       0.46 &      46.89 &      47.00
+        \\
+        \hline
+        {\bf Max}   &     426.60 &    1036.48 &    1864.67 &      49.08 &     100.00
+        &     358.83 &      25.50 &      12.08 &     355.45 &     994.00 \\
+        \hline
+        {\bf Skew}  &     114.55 &      -7.32 &       1.61 &       0.55 &      -0.44
+        &       0.04 &       3.74 &       2.75 &       1.56 &       2.72 \\
+        \hline
+        {\bf Kurt}  &   23177.40 &     282.90 &       1.48 &       0.33 &      -0.40
+        &      -0.97 &      47.30 &      24.85 &       3.71 &      38.67 \\
+        \hline
+    \end{tabular}
+    \caption{Statistics of the meterological variables and gases.}
+    \label{tab:statistics-variables}
+\end{table*}
+
+
+The time series of the three gases are presented in Figure
+\ref{fig:time-series-gases}. We observe an increase in ozone levels during the
+year and a season effect, what corroborates on the way ozone is formed.  It
+also seems there is a reduction in variability in CO and PM$_{10}$ levels. The
+year of 2020 show a reduction in CO apparently, what is explained by the
+Coronavirus pandemic. 
+
+We confirm the tendencies of PM$_{10}$ and O$_3$ in Figure \ref{fig:time-series-gases-year}. It is important to note that
+2021 is not finished, so season effects are not complete yet.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=.45\textwidth]{time-plots-gases-yearly.eps}
+    \caption{Time series with yearly average levels.}
+    \label{fig:time-series-gases-year}
+\end{figure}
+
+By Figure \ref{fig:histogram-obs-years}, years 2011 and 2021 have less
+observation than the others. The year 2021 did not end as previously
+mentioned and the year 2011 had less monitoring stations.  
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.47\textwidth]{histogram.eps}
+    \end{center}
+    \caption{Number of hourly measurements per year. In 2011, only half of the monitoring stations worked.}
+    \label{fig:histogram-obs-years}
+\end{figure}
+
+Figure \ref{fig:correlation-features} shows an overview of the correlations
+between different features of the data to identify possible linear relations.
+The scatter plots of two to two features represents it with more details, but
+there much data, and the image has a large size. It does not present anything
+much different, though. The variables {\tt Temp}, {\tt UR}, and {\tt RS} are
+strongly linearly related with absolute correlation greater than 0.6.
+
+
+\begin{figure*}[t]
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{correlation-graph.eps}
+    \end{center}
+    \caption{Correlation heat map comparing the data features.}
+    \label{fig:correlation-features}
+\end{figure*}
 
 \subsection{Data preprocessing}
 \label{sec:data-preprocessing}
@@ -145,14 +237,6 @@ From the variable {\tt Data}, we can observe (Figure
 \ref{fig:histogram-obs-years}) that 2011 has less observations, because there
 were only four of the eight stations operating. For that reason, we do not
 consider the data from this year. 
-
-\begin{figure}
-    \begin{center}
-        \includegraphics[width=0.47\textwidth]{histogram.eps}
-    \end{center}
-    \caption{Number of hourly measurements per year. In 2011, only half of the monitoring stations worked.}
-    \label{fig:histogram-obs-years}
-\end{figure}
 
 \begin{enumerate}
     \item Analisar sazonalidade. Adicionar termo seno e cosseno de forma que
