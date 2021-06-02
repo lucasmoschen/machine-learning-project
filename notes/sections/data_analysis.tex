@@ -189,7 +189,6 @@ there much data, and the image has a large size. It does not present anything
 much different, though. The variables {\tt Temp}, {\tt UR}, and {\tt RS} are
 strongly linearly related with absolute correlation greater than 0.6.
 
-
 \begin{figure*}[t]
     \begin{center}
         \includegraphics[width=0.9\textwidth]{correlation-graph.eps}
@@ -198,18 +197,26 @@ strongly linearly related with absolute correlation greater than 0.6.
     \label{fig:correlation-features}
 \end{figure*}
 
+We also observe an interesting behavior of the ozone during the day, as showed
+in Figure \ref{fig:hourly-boxplot-ozone}. For each hour of the day, we drew a
+boxplot to represent the distribution of ozone in the respective hour. We
+observe that (1) the pollutants have heavy tail, or this data has a lot of
+outliers; and (2) the medians go along with the movement of the sun.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.47\textwidth]{hourly_measure_o3.eps}
+    \end{center}
+    \caption{Boxplot of hourly ozone measurements for each hour. It seems to accompany the sun during the day. }
+    \label{fig:hourly-boxplot-ozone}
+\end{figure}
+
+
 \subsection{Data preprocessing}
 \label{sec:data-preprocessing}
 
 The data preprocessing is an important step before the usage of machine
 learning algorithms, in order to report robust and neat results. 
-
-\begin{enumerate}
-    \item Imputation of missing data
-    \item Handling outliers
-    \item normalization and standardization. 
-    \item feature engineering
-\end{enumerate}
 
 \subsubsection{Missing data imputation}
 
@@ -229,6 +236,7 @@ different ways.
 
 \begin{enumerate}
     \item Transformação Yeo-Johnson 
+    \item normalization and standardization. 
 \end{enumerate}
 
 \subsubsection{Feature extraction}
