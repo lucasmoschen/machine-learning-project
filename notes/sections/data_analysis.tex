@@ -234,47 +234,47 @@ different ways.
 
 \subsubsection{Data transformation}
 
-\begin{enumerate}
-    \item Transformação Yeo-Johnson 
-    \item normalization and standardization. 
-\end{enumerate}
+We applied the Yeo-Johnson power transform \cite{yeo2000} on continuous
+variables in order to approximate the data distribution to a Gaussian
+distribution and to
+decrease the heteroscedasticity, as suggested by \cite{gocheva2014}. In figure
+\ref{fig:before-after-transform}, the gases distribution (disconsidered
+missing data imputation) are shown before and after the transformation. The
+selected $\lambda$ for each feature was estimated through maximum likelihood.
+Following the order from table \ref{tab:statistics-variables}, the values
+were, approximately, 
+-21.70,  11.99, -0.11, 0.28, 1.53, 0.86, -0.81, -1.58, 0.25, and 0.27. 
 
+\begin{figure*}
+    \centering
+    \includegraphics[width = 0.9\textwidth]{before_after_transform_gases.eps}
+    \caption{Gases distribution before and after the power transform.}
+    \label{fig:before-after-transform}
+\end{figure*}
+ 
 \subsubsection{Feature extraction}
 
-From the variable {\tt Data}, we can observe (Figure
-\ref{fig:histogram-obs-years}) that 2011 has less observations, because there
-were only four of the eight stations operating. For that reason, we do not
-consider the data from this year. 
+From the variable {\tt Data}, we could extract the variables {\tt year, month,
+day}, and {\tt hour}. We also create a boolean variable for the weekend, and a
+{\tt season} variable with values 0, 1, 2, or 4. In
+order to consider the hourly seasonality, we also add the variables
+\begin{gather*}
+    \text{hour\_sin} = \sin(2\pi \text{ hour}/24), \\
+    \text{hour\_cos} = \cos(2\pi \text{ hour}/24). 
+\end{gather*}
 
 \begin{enumerate}
-    \item Analisar sazonalidade. Adicionar termo seno e cosseno de forma que
-    exista sazonalidade diária, isto é, 
-    $$
-    \text{hour\_sin} = \sin(2\pi \text{ hour}/24)
-    $$
-    \item Create variable season. 
     \item Visualize the series autocorrelation in order to define the number
     of lag variables per pollutant and particle.
-    \item Complete the dataset with temporal variables.     
     \item The number of features is XXX: lag features, roll mean features,
     weekend, season, trigonometric  
 \end{enumerate}
 
 \subsubsection{Feature selection}
 
-In order to reduce the dimensionality of the feature space, from the XXX
-variables described, variable selection was performed. Filters are methods
-which perform feature selection, as well as embedding methods, although they
-depend on the machine learning algorithm chosen. 
-
-\begin{enumerate}
-    \item Pearson correlation-based filter to feature selection. Observe
-    correlation of the lag variables. 
-\end{enumerate}
-
-The objective of this work is generate different forecasting models for the
-pollutants A, B, C, and D. The maintained features in the dataset can be seen
-in Table XXX.
+Variables to remove: {\tt hour} since it is highly correlated to {\tt hour\_sin}, and {\tt Data}, because it has no service anymore. We will have
+only numeric variables from now on. \com{We need to observe correlation
+between lag variables from the pollutants}
 
 \com{We applied PCA in order to reduce the dimensionality.}
 
