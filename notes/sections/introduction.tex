@@ -10,33 +10,33 @@ pollution, what can give rise to damage on human health.
 The emission and
 transmission of air pollutants, such as, Nitrogen dioxide (NO$_2$), Carbon
 monoxide (CO), Ozone (O$_3$)
-and Particulate Matter (PM), results in the ambient air pollution, which can be
+and, Particulate Matter (PM), result in the ambient air pollution, which can be
 caused by different factors. The World Health
 Organization (WHO) explained \cite{who2006} that PM, O$_3$, and NO$_2$ have, respectively, the
-strongest effects on health of air quality. 
+strongest effects on health of air quality.
 
 In Rio de Janeiro city, the city hall recognized the problem and created the
 Program MonitorAr-Rio in 2008 \cite{relatorio2011}. The objective was to
 monitor the air quality in the city, in order to verify the degree of exposure
-to the pollutants of the population, and inform the results to the population.
+of the population to the pollutants, and inform the results to the population.
 Eight fixed stations monitor the main pollutants defined in the legislation,
 and some meterological conditions, such as, for example, temperature, relative
 humidity, solar radiation, and wind. 
 
 It is important to have updated knowledge and accurate predictions of the
 air pollutants, in order to help the formulation of public health and
-environmental policies. This study proposes models for hourly/daily air
-quality forecasting for the city of Rio de Janeiro, using the algorithms XXX
-and XXX. 
+environmental policies. This study proposes models for hourly air
+quality forecasting for the city of Rio de Janeiro. 
 
 The text is organized as follows. Section \ref{sec:problem-definition} defines
 the problem clearly and mathematically. Section \ref{sec:background} gives a
 background on the topic of air quality and air pollution. Section \ref{sec:methodology} presents
-the methodology of the work. We present an exploratory data analysis with the
-data path in Section \ref{sec:eda}. Section \ref{sec:experiments} presents the
+the methodology of the work. Section \ref{sec:eda} contains a description of the data used in this
+work and an exploratory data analysis with the
+data path. Section \ref{sec:experiments} presents the
 methods used and the experiments related to each one. Sections
-\ref{sec:results}, \ref{sec:discussion}, and \ref{sec:conclusion} presents the
-results and concludes it. 
+\ref{sec:results}, \ref{sec:discussion}, and \ref{sec:conclusion} end the text
+with main results and conclusions. 
 
 
 \section{Problem definition}
@@ -53,18 +53,17 @@ variable indicating the quantity of i$^{th}$ pollutant measured in a specific
 monitoring station, for instance, the quantity of ozone. If $\bb{X} \in \mathcal{X}
 \subseteq \R^{p}$ is the random vector of meterological conditions measured,
 $t$ is the time of measurement, and $s_1, ..., s_8$ the positions of the
-monitoring stations, we have that 
+monitoring stations, then it is measured 
 \begin{equation}
     \label{eq:problem definition}
     Y_i = f_i(t, s_k, \bb{X}) + \epsilon_{t,s_k,i}
 \end{equation}
 where $\epsilon_{t,s,i}$ is a random variable with mean zero. After
-observing, for $t_1 < ... < t_n$,  
+observing, for $t_1 < ... < t_n$,
 $$y_i^{t_1,s}, ..., y_i^{t_n,s}$$ 
 and 
 $$
 \bb{x}^{t_1,s}, ..., \bb{x}^{t_n,s},
 $$
-we want to predict $y_i^{\bar{t},s}$ for $\bar{t} > t_{n+1}$. We also want to
-predict $y_i^{t, \tilde{s}}$ for $\tilde{s}$ different from $s_k$, for $k =
-1,...,8$. 
+we want to predict $y_i^{\bar{t},s}$ for $\bar{t} > t_{n+1}$ and $y_i^{t,
+\tilde{s}}$ for $\tilde{s} \not \in \{s_k : k = 1,...,8\}$.

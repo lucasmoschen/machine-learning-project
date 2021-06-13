@@ -9,30 +9,26 @@ pollutant, weather condition, and monitoring stations' characteristics from
 the city of Rio de Janeiro. Table
 \ref{tab:measured-data} informs the most important variables used, and Table
 \ref{tab:pollutants-measured} indicates the measured pollutants per monitoring
-station. The events were collected between January 1,
+station. The events start on January 1,
 2011,
-and March 31, 2021. A total of 661,662 records were used.
+and end on March 31, 2021, totalizing 661,662 records.
 
-We count the missing values for each of the main variables used in this work
-and present them in Table \ref{tab:missing-values}. We observe that some
-meterological variables have more than 10\% of missing values, what is a lot.
-The CO gas has more missing values than the other gases, because Pedra de
-Guaratiba does not measure it. If we disconsider this kind of absent values,
-CO has around 6\%. Imputation methods to handle this problem in Section
-\ref{sec:data-preprocessing}.
+The missing values (Table \ref{tab:missing-values}) for each of the main variables used in this work 
+are around 10\%. Some meteorological variables have more than 10\% of missing values, which is a lot.
+The CO gas has more missing values than the other gases because Pedra de
+Guaratiba does not measure it. When this kind of absent value is disregarded,
+CO has around 6\%. Imputation methods in Section \ref{sec:data-preprocessing}.
 
-It is also noticed that almost 91\% of the values in {\tt Chuva} column and 26\%
-of {\tt RS} column are zero. If we consider the accumulated monthly amount of
-rain, the value seems to make sense and it is comparable to other sources,
-therefore we kept it. 
+Almost 91\% of the values in the {\tt Chuva} column and 26\% of the {\tt RS} column are zero. If we consider the accumulated monthly amount of
+rain, it seems to make sense, and it is comparable to other sources. 
 
-We did not observe any pattern of missing values per year or per monitoring
+We did not observe any pattern of missing values per year or monitoring
 station. In 2012, over half of the wind information is missing, however other
 features are stable. However, after 2016, UR dominates the number of absent
 data. If we aggregate by time (hour, day, month, and year), and sum up the
-values of the features of each station, we observe little missing data. This
-implies we can use information of other stations to impute data whenever
-necessary. 
+values of the features of each station, there are less missing data,
+proportionally, what. This
+implies other stations can provide useful information. 
 
 \begin{table*}[t]
     \centering
@@ -101,14 +97,13 @@ necessary.
     \label{tab:missing-values}    
 \end{table}
 
-We see the summary statistics of the variables in Table
-\ref{tab:statistics-variables}. The high skewness and kurtosis from {\tt
-Chuva} column reaffirm we have heavy tails, or outliers. We can say the same
-for {\tt Press}. This is interesting because, it is common to see days with
+Table \ref{tab:statistics-variables} contains the summary statistics of the variables. The high skewness and kurtosis from {\tt
+Chuva} column reaffirm the heavy tails of its distribution, or the presence of
+outliers. The same occurs with {\tt Press}. This is interesting because, it is common to see days with
 extreme values in meterological variables. In particular, the only hours with
 precipitation greater than 100 mm were in May 2020 in Tijuca, what is
 confirmed by weather references \cite{climatempo}. CO and PM$_{10}$ have high
-kurtosis also, so we shall give an attention for outliers too. 
+kurtosis also and, therefore, can have outliers. 
 
 \begin{table*}[t]
     \centering
@@ -154,8 +149,8 @@ kurtosis also, so we shall give an attention for outliers too.
 
 
 The time series of the three gases are presented in Figure
-\ref{fig:time-series-gases}. We observe an increase in ozone levels during the
-year and a season effect, what corroborates on the way ozone is formed.  It
+\ref{fig:time-series-gases}. It indicates an increase in ozone levels during the
+years and a season effect, what corroborates on the way ozone is formed.  It
 also seems there is a reduction in variability in CO and PM$_{10}$ levels. The
 year of 2020 show a reduction in CO apparently, what is explained by the
 Coronavirus pandemic. 
@@ -197,17 +192,18 @@ strongly linearly related with absolute correlation greater than 0.6.
     \label{fig:correlation-features}
 \end{figure*}
 
-We also observe an interesting behavior of the ozone during the day, as showed
-in Figure \ref{fig:hourly-boxplot-ozone}. For each hour of the day, we drew a
-boxplot to represent the distribution of ozone in the respective hour. We
+Figure \ref{fig:hourly-boxplot-ozone} shows an interesting behavior of the ozone during the day. For each hour of the day, we represent the distribution of ozone in the respective hour. We
 observe that (1) the pollutants have heavy tail, or this data has a lot of
 outliers; and (2) the medians go along with the movement of the sun.
 
+\vspace{-0.5cm}
+
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=0.47\textwidth]{hourly_measure_o3.eps}
+        \includegraphics[width=0.42\textwidth]{hourly_measure_o3.eps}
     \end{center}
-    \caption{Boxplot of hourly ozone measurements for each hour. It seems to accompany the sun during the day. }
+    \vspace{-0.8cm}
+    \caption{Boxplot of hourly ozone measurements. }
     \label{fig:hourly-boxplot-ozone}
 \end{figure}
 
@@ -216,15 +212,25 @@ outliers; and (2) the medians go along with the movement of the sun.
 \label{sec:data-preprocessing}
 
 The data preprocessing is an important step before the usage of machine
-learning algorithms, in order to report robust and neat results. 
+learning algorithms, in order to report robust and neat results. Data from
+year 2020 and 2021 will be removed given the pandemic in the world. 
+
+\subsubsection{Seasonal and time features}
+
+From the variable {\tt Data}, it is extracted the variables {\tt year, month,
+day}, {\tt hour}, a boolean variable indicating the weekend, and a {\tt season} variable. In
+order to consider the hourly seasonality, it is created the variables
+$\text{hour\_sin} = \sin(2\pi \text{ hour}/24)$ and $\text{hour\_cos} =
+\cos(2\pi \text{ hour}/24)$. 
 
 \subsubsection{Missing data imputation}
 
 In this dataset, there is two types of missing data: (1) monitoring stations
 do not measure all pollutants by construction. For instance, it is not
-measured NOx in Centro and Copacabana; and (2) monitoring stations did not
-measure in a period for some reason. We have to deal with them in two
-different ways. 
+measured CO in Pedra de Guaratiba; and (2) monitoring stations did not
+measure in a period for some reason. For the first case, missing values remain
+in the dataset and the prediction is not performed. For the second case, two
+methods were compared: by location and KNN.  
 
 \begin{enumerate}
     \item Possíveis formas de imputação: estimação polinomial de 2ª ordem.
@@ -238,7 +244,7 @@ We applied the Yeo-Johnson power transform \cite{yeo2000} on continuous
 variables in order to approximate the data distribution to a Gaussian
 distribution and to
 decrease the heteroscedasticity, as suggested by \cite{gocheva2014}. In figure
-\ref{fig:before-after-transform}, the gases distribution (disconsidered
+\ref{fig:before-after-transform}, the gases distribution (disregarded
 missing data imputation) are shown before and after the transformation. The
 selected $\lambda$ for each feature was estimated through maximum likelihood.
 Following the order from table \ref{tab:statistics-variables}, the values
@@ -253,15 +259,6 @@ were, approximately,
 \end{figure*}
  
 \subsubsection{Feature extraction}
-
-From the variable {\tt Data}, we could extract the variables {\tt year, month,
-day}, and {\tt hour}. We also create a boolean variable for the weekend, and a
-{\tt season} variable with values 0, 1, 2, or 4. In
-order to consider the hourly seasonality, we also add the variables
-\begin{gather*}
-    \text{hour\_sin} = \sin(2\pi \text{ hour}/24), \\
-    \text{hour\_cos} = \cos(2\pi \text{ hour}/24). 
-\end{gather*}
 
 \begin{enumerate}
     \item Visualize the series autocorrelation in order to define the number
