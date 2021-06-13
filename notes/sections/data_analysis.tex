@@ -229,14 +229,50 @@ In this dataset, there is two types of missing data: (1) monitoring stations
 do not measure all pollutants by construction. For instance, it is not
 measured CO in Pedra de Guaratiba; and (2) monitoring stations did not
 measure in a period for some reason. For the first case, missing values remain
-in the dataset and the prediction is not performed. For the second case, two
-methods were compared: by location and KNN.  
+in the dataset and the prediction is not performed. For the second case, three
+methods were compared:  
 
 \begin{enumerate}
-    \item Possíveis formas de imputação: estimação polinomial de 2ª ordem.
-    Alguns testes simples pode ser interessante. Para locais onde não há
-    estimação, não faz sentido imputar. 
+    \item {\bf Simple mean imputation:} For each year and each column, the
+    algorithm imputes the mean in the NaN values. 
+    \item {\bf Location:} For each time period, the missing values are
+    replaced by the average among the others measuring stations. For example, if
+    CO is missing at 6h on 01/01/2011 at Centro station, it is replaced by the
+    mean among the other stations in the same time. 
+    \item {\bf k-NN:} For each year, if a feature is missing in row $i$, the
+    algorithm selects the $k$ closer points according to the nan euclidean
+    measure. This measure calculates the euclidean distance among non NaN
+    entries and rescale depending on the number of them. The years are
+    separated to reduce the number of rows.
 \end{enumerate}
+
+The data values are normalized to the range of $[0,1]$, because k-NN is based
+on a distance measure. To evaluate these methods, we develop a sample strategy
+similar to the Bootstrap method. In each simulation, we sample 20\% of rows with
+non NaN values and randomly choose 7\% of the cells to be removed (this value
+was chosen because this was observed across the entire dataset). From the simulated
+dataset with missing values, the methods impute as explained before. We
+compare the imputed sample after imputation with the sample before removal and calculate
+the mean squared error. The results for the year 2016 are above \ref{tab:result-imputation}. 
+
+\begin{table}[!hb]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Método}   & \textbf{MSE} \\ \hline
+    5-NN              & 6.504e-04    \\ \hline
+    10-NN             & 6.504e-04    \\ \hline
+    30-NN             & 6.504e-04    \\ \hline
+    50-NN             & 6.504e-04    \\ \hline
+    100-NN            & 6.504e-04    \\ \hline
+    Location          & 1.077e-03    \\ \hline
+    Simple Imputation & 1.636e-03    \\ \hline
+    \end{tabular}
+    \caption{Results from the imputation}
+    \label{tab:result-imputation}
+\end{table}
+
+For that reason, we apply the 5-NN in the dataset per year to impute data. 
 
 \subsubsection{Data transformation}
 
