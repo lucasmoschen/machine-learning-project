@@ -285,7 +285,7 @@ missing data imputation) are shown before and after the transformation. The
 selected $\lambda$ for each feature was estimated through maximum likelihood.
 Following the order from table \ref{tab:statistics-variables}, the values
 were, approximately, 
--21.70,  11.99, -0.11, 0.28, 1.53, 0.86, -0.81, -1.58, 0.25, and 0.27. 
+-20.16, 12.58, -0.1, 0.29, 1.59, 0.81, -0.79, -1.69, 0.28, and 0.27.
 
 \begin{figure*}
     \centering
@@ -296,16 +296,36 @@ were, approximately,
  
 \subsubsection{Feature extraction}
 
+The lag is a time gap in the series and are useful to analyse seasonality. In
+general, besides the influence of another variables, the past values can be
+helpful to make good predictions. An exploratory study with autocorrelation
+(ACF) and partial autocorrelation (PACF) to define the number of lag
+variables. Figure \ref{fig:acf-pacf} shows interesting patterns: CO has spikes
+at 12 multiples. That indicates a high correlation with twelve hours
+difference. The ozone does not have this quality, but presents the diary
+spikes. It is interesting that at Bangu station, this is negatively related.
+Since the PACF has only two spikes in all graphs, there is an autoregressive
+term in the pollutants series of order two. We add two lag variables for each
+pollutant and each monitoring station, then. We also add a 24 lag time.   
+
+\begin{figure*}
+    \centering
+    \includegraphics[width = 0.9\textwidth]{acf_pacf_gases.eps}
+    \caption{ACF and PACF plots for CO, O$_3$, and PM$_{10}$ at Copacabana and
+    Bangu stations. }
+    \label{fig:acf-pacf}
+\end{figure*}
+
+
+
 \begin{enumerate}
-    \item Visualize the series autocorrelation in order to define the number
-    of lag variables per pollutant and particle.
     \item The number of features is XXX: lag features, roll mean features,
     weekend, season, trigonometric  
 \end{enumerate}
 
 \subsubsection{Feature selection}
 
-Variables to remove: {\tt hour} since it is highly correlated to {\tt hour\_sin}, and {\tt Data}, because it has no service anymore. We will have
+Variables to remove: {\tt hour} since it is highly correlated with {\tt hour\_sin}, and {\tt Data}, because it has no service anymore. We will have
 only numeric variables from now on. \com{We need to observe correlation
 between lag variables from the pollutants}
 
