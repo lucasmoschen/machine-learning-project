@@ -316,18 +316,11 @@ pollutant and each monitoring station, then. We also add a 24 lag time.
     \label{fig:acf-pacf}
 \end{figure*}
 
-
-
-\begin{enumerate}
-    \item The number of features is XXX: lag features, roll mean features,
-    weekend, season, trigonometric  
-\end{enumerate}
-
-\subsubsection{Feature selection}
-
 Variables to remove: {\tt hour} since it is highly correlated with {\tt hour\_sin}, and {\tt Data}, because it has no service anymore. We will have
-only numeric variables from now on. \com{We need to observe correlation
-between lag variables from the pollutants}
+only numeric variables from now on. The total number of features after all
+the above processes is 29 including meteorological conditions, time-related,  lags,
+and pollutants measurements.
 
-\com{We applied PCA in order to reduce the dimensionality.}
-
+Given the high dimensionality (26 independent variables), a principal
+component analysis (PCA) was applied to compare the results when the whole
+dataset is used.
