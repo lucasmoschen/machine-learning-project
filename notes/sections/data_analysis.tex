@@ -272,7 +272,9 @@ the mean squared error. The results for the year 2016 are above \ref{tab:result-
     \label{tab:result-imputation}
 \end{table}
 
-For that reason, we apply the 5-NN in the dataset per year to impute data. 
+For that reason, we apply the 5-NN in the dataset per year to impute data. It
+is important to note that the computation was a real barrier for a more deep
+analysis. 
 
 \subsubsection{Data transformation}
 
@@ -306,7 +308,10 @@ difference. The ozone does not have this quality, but presents the diary
 spikes. It is interesting that at Bangu station, this is negatively related.
 Since the PACF has only two spikes in all graphs, there is an autoregressive
 term in the pollutants series of order two. We add two lag variables for each
-pollutant and each monitoring station, then. We also add a 24 lag time.   
+pollutant and each monitoring station, then. We also add a 24 lag time to
+catch the diary influence. Besides that, a rolling mean variable with a 24 lag
+is added to simulate a moving average (MA) term. It is not possible to use the MA
+model in this framework since they are not observed \cite{liang2020machine}. 
 
 \begin{figure*}
     \centering
@@ -318,9 +323,11 @@ pollutant and each monitoring station, then. We also add a 24 lag time.
 
 Variables to remove: {\tt hour} since it is highly correlated with {\tt hour\_sin}, and {\tt Data}, because it has no service anymore. We will have
 only numeric variables from now on. The total number of features after all
-the above processes is 29 including meteorological conditions, time-related,  lags,
+the above processes is 32 including meteorological conditions, time-related,
+lags, moving averages, 
 and pollutants measurements.
 
-Given the high dimensionality (26 independent variables), a principal
+Given the high dimensionality (29 independent variables), a principal
 component analysis (PCA) was applied to compare the results when the whole
-dataset is used.
+dataset is used. This is done only to verify if all the variables really help
+the forecasting. 

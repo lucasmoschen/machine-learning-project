@@ -28,11 +28,13 @@
 \bibliographystyle{apalike}
 
 %Others
-\usepackage{url}
+\usepackage{xurl}
+\PassOptionsToPackage{hyphens}{url}
 \usepackage[colorlinks=true,citecolor=blue,linkcolor=magenta]{hyperref}
 \usepackage{ifthen}
 \usepackage{multirow}
 \usepackage{lipsum}
+
 
 %----------------------------------------------
 %---------------Math definitions---------------
@@ -101,10 +103,6 @@
 
 %\newpage
 
-\twocolumn[
-    \begin{@twocolumnfalse}
-        \bibliography{sections/biblio} 
-    \end{@twocolumnfalse}
-]
+\bibliography{sections/biblio} 
 
 \end{document}
