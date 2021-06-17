@@ -9,6 +9,21 @@ fitting, using the {\em Expectation Maximization}.
 
 \subsection{Linear Regression}
 
+The first attempt was to consider linear regression. In this case, the model
+supposes that the expected value of the gases quantity (conditioned on the
+data) is a linear combination of the independent variables. 
+
+First we apply the simple OLS on the whole dataset. In general this is not a
+great model, because it adds variance on the estimation and, for that reason, we consider a regularization term (elastic
+net) with two parameters: $\alpha$ to control the penalty, and $w_{l1}$ to
+control the weight given to $\mathcal{L}_1$ penalty. The parameters are chosen
+with cross validation. 
+
+Finally, to reduce the number of features considered in the model, a
+Forward Feature Selector with cross validation is performed. It adds features
+in a greedy fashion. The estimator chooses the best feature based on the
+cross-validation score, the mean squared error (MSE), for instance. 
+
 \subsection{Support Vector Machine}
 
 \subsection{Random Forest}
