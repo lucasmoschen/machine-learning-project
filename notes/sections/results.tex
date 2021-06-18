@@ -1,17 +1,60 @@
 \section{Results}
 \label{sec:results}
 
+The results are separated by gas, but not by monitoring station. We present
+more detailed results for only one (Tijuca station was chosen randomly), and after aggregated results
+considering all the stations. This is done because we have more than
+a hundred models to analyse. To deal with this diversity, the steps
+(hyperparameters choice and evaluation) are automated. We are
+making predictions one hour ahead and it is possible to compare with one day
+ahead models. 
+
+\subsection{Tijuca monitoring station}
+
+The results follow the order specified in the above summary. 
+
+\subsubsection{CO}
+
+\subsubsection{O\texorpdfstring{$_3$}{3}}
+
+\subsubsection{PM\texorpdfstring{$_{10}$}{10}}
+
+\subsubsection{AIQ}
+
+\subsection{Aggregated results}
+
+\subsubsection{CO}
+
+\subsubsection{O\texorpdfstring{$_3$}{3}}
+
+\subsubsection{PM\texorpdfstring{$_{10}$}{10}}
+
+\subsubsection{AIQ}
+
+\subsection{Model for other locations}
+
+Here, we want to make predictions about pollutant levels at other not measured
+sites. Given that each location has a specific model, the prediction
+is the weighted mean regarding each prediction 
+
+
+
 \begin{enumerate}
-    \item Quantitative results of my experiments. 
-    \item Statistical significance.
+    \item 1 modelo para cada gás e cada estação. 
+    \item Temos 7 opções de modelos até o momento (analisando friamente, 23 x
+    7 = 161 modelos a serem fittados e analisados). 
+    \item Como realizar tantos experimentos para cada modelo de forma
+    automática? \com{A ideia é escrever um código para escolha de hiperparâmetros e
+    reporte de resultados automaticamente.}
+    \item Pegar uma estação para analisar os resultados mais cuidadosamente. 
+    \item Testes de significância.  
 \end{enumerate}
 
 Lembrar de 
 
 \begin{enumerate}
     \item Testar estacionaridade de cada série; 
-    \item Lembrar de inverter os dados pelo power transformation: ler p2,
-    fazer power transform. 
+    \item Lembrar de inverter os dados pelo power transformation: ler p2, fazer power transform. 
 \end{enumerate}
 
 

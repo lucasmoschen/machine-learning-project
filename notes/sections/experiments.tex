@@ -5,7 +5,8 @@ We have already separated the dataset into training and testing. In this
 section we describe the methods used for the estimation: {\em Linear
 Regression}, {\em Support Vector Machine}, {\em Random Forest}, {\em
 Boosting}, and a model that handle missing data simultaneously with the
-fitting, using the {\em Expectation Maximization}.
+fitting, using the {\em Expectation Maximization}. Each gas and each
+localization has its own model. 
 
 \subsection{Linear Regression}
 
@@ -21,13 +22,61 @@ with cross validation.
 
 Finally, to reduce the number of features considered in the model, a
 Forward Feature Selector with cross validation is performed. It adds features
-in a greedy fashion. The estimator chooses the best feature based on the
-cross-validation score, the mean squared error (MSE), for instance. 
+in a greedy fashion. The estimator chooses the best feature based on
+cross-validation score (mean squared error (MSE), for instance). 
 
-\subsection{Support Vector Machine}
+\subsection{Support Vector Regression}
+
+It is an extension of Support Vector Machine (SVM) algorithms for
+regression. Given the more than quadratic complexity of the algorithm, this
+does not scale for datasets with more than 10,000 samples, as suggested by Scikit-learn User Guide \cite{svr-function,
+scikit-learn}. For that reason, we
+suppose a linear kernel. The loss function considered is $\mathcal{L}_1$ loss,
+with parameter $\epsilon$. A regularization parameter $C$ is also added to the
+model, such that, $C$ is inversely proportional to the strength of the
+regularization. The parameters are also calibrated with cross validation. All
+columns are scaled to have mean 0 and variance 1. 
 
 \subsection{Random Forest}
 
-\subsection{Boosting}
+The random forest regressor is an extension of decision tree with $B$
+bootstrap samples such that each split considers $m$ predictors, that is the
+root of the number of predictors. The parameter
+$c$ measures the complexity parameter (minimal cost-complexity pruning).
+The criterion to measure the quality of a split is MSE, in order to reduce
+variance. The minimum number of samples required to split is the parameter
+$s$. 
+
 
 \subsection{Linear Regression + Expectation Maximization}
+
+In this scenario, we follow the approach developed by \cite{rubin1977} and
+demonstrated by \cite{missing-values-estimation}. This method supposes the
+data comes from a normal distribution with mean $\mu_{y,X}$ and covariance matrix
+$\Sigma_{y,X}$, including the dependent and independent variables. It uses the Expectation Maximization (EM) algorithm to estimate
+these parameters, despite the missing data. With the normal parameters estimated, the following formula
+allows the specification of the regressor parameters:
+$$
+\beta = (\mu_y - \Sigma_{y,X}\Sigma_X^{-1}\mu_X, \Sigma_{y,X}\Sigma_X^{-1})^T.
+$$
+A forward variable selection in the same terms as before is applied. The data
+transformations \ref{sec:data-transform} are done without the missing data imputation.  
+
+\subsection{Summary} 
+
+Therefore the considered models and hyperparameters are the following:
+
+\begin{enumerate}
+    \item Simple linear regression: all predictors, no hyperparameter. 
+    \item Elastic-net regression: all predictors, $\alpha$ measuring the
+    penalty strength, and $w_{l1}$ the weight for $\mathcal{L}_1$ penalty. 
+    \item Forward Feature Selection + Elastic-net regression: besides the
+    above hyperparameters, the number of features to select. 
+    \item Support Vector Regression: all predictors, $\epsilon$ measures the
+    loss, and $C$ the regularization term. The variables are transformed
+    between 0 and 1. 
+    \item Random Forest: all predictors, $B$ bootstrap samples, $c$ is the
+    complexity parameter, and $s$ is the minimum number of samples. 
+    \item Linear regression + missing data imputation: no additional
+    parameters. 
+\end{enumerate}
