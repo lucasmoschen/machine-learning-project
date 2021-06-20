@@ -18,12 +18,17 @@ First we apply the simple OLS on the whole dataset. In general this is not a
 great model, because it adds variance on the estimation and, for that reason, we consider a regularization term (elastic
 net) with two parameters: $\alpha$ to control the penalty, and $w_{l1}$ to
 control the weight given to $\mathcal{L}_1$ penalty. The parameters are chosen
-with cross validation. 
+with cross validation (5-Fold). This approach allows adding polynomial and
+interaction terms, since the $\mathcal{L}_1$ penalty sets several parameters
+to zero. The 5-Fold is realized with $w_{l1} \in \{0.1, 0.2, ..., 0.9, 1.0\}$
+and $\alpha \in \{1,2,3,...,20\}$. 
 
-Finally, to reduce the number of features considered in the model, a
-Forward Feature Selector with cross validation is performed. It adds features
-in a greedy fashion. The estimator chooses the best feature based on
-cross-validation score (mean squared error (MSE), for instance). 
+Other interesting approach to do feature selection, rather than $\mathcal{L}_1$
+penalty is Forward Feature Selector. It is slower than Elastic Net, but it
+selects a best subset of features given that it adds     features in a greedy
+fashion. The estimator chooses the best feature based on
+cross-validation score (with r2 score) and it stops if the improving in the
+score is lesser than a threshold. 
 
 \subsection{Support Vector Regression}
 
@@ -34,7 +39,7 @@ scikit-learn}. For that reason, we
 suppose a linear kernel. The loss function considered is $\mathcal{L}_1$ loss,
 with parameter $\epsilon$. A regularization parameter $C$ is also added to the
 model, such that, $C$ is inversely proportional to the strength of the
-regularization. The parameters are also calibrated with cross validation. All
+regularization. The parameters are also calibrated with cross validation (5-Fold). All
 columns are scaled to have mean 0 and variance 1. 
 
 \subsection{Random Forest}
@@ -70,8 +75,8 @@ Therefore the considered models and hyperparameters are the following:
     \item Simple linear regression: all predictors, no hyperparameter. 
     \item Elastic-net regression: all predictors, $\alpha$ measuring the
     penalty strength, and $w_{l1}$ the weight for $\mathcal{L}_1$ penalty. 
-    \item Forward Feature Selection + Elastic-net regression: besides the
-    above hyperparameters, the number of features to select. 
+    \item Forward Feature Selection + Linear regression: The number of
+    features to select as function of a threshold.
     \item Support Vector Regression: all predictors, $\epsilon$ measures the
     loss, and $C$ the regularization term. The variables are transformed
     between 0 and 1. 

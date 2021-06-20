@@ -13,15 +13,13 @@ ahead models.
 
 The results follow the order specified in the above summary for each pollutant. 
 
-\subsubsection{CO}
-
 \subsubsection{O\texorpdfstring{$_3$}{3}}
 
 {\em Simple linear regression}
 
 \vspace{2mm}
 
-Applying the simple linear regression, the $R^2$ in the testing set was 0.84,
+Applying the simple linear regression, the $R^2$ in the testing set was 0.837,
 what appears to be a good start fitting. The variable with greater t-statistic
 was O$_3$ shifted by one hour. Other features with great t-statistic (more than
 20) was, in
@@ -36,10 +34,9 @@ the histogram of the residuals very similar to a normal distribution (as
 assumed by the model).The kurtosis was nearly 3, while the skewness around
 0.22. Jarque-Bera rejects the null hypotheses that skew and kurt are the same
 as normal distribution, however.  The fitting result in testing data can be
-partially observed in Figure \ref{fig:observed-fitting-ozone-tijuca}.
-
-When the lags 1 and 2 are removed, that is, only using the lag 24, the metrics
-get much worse. In special, $R^2$ is around 0.49.  
+partially observed in Figure \ref{fig:observed-fitting-ozone-tijuca}. Looking
+at Figure  \ref{fig:observed-vs-residual-linear-regression}, as larger the
+observed ozone gets, the more underestimated the prediction is.
 
 \begin{figure}
     \centering
@@ -48,12 +45,95 @@ get much worse. In special, $R^2$ is around 0.49.
     \label{fig:histogram-residuals-slr}
 \end{figure}
 
-\begin{figure*}
+\begin{figure}[!hb]
+    \centering
+    \includegraphics[width=0.45\textwidth]{observed-vs-residuals-linear-regression.eps}
+    \caption{Simple linear regression residuals plotted against
+    observed ozone values.}
+    \label{fig:observed-vs-residual-linear-regression}
+\end{figure}
+
+When the lags 1 and 2 are removed, that is, only using the lag 24, the metrics
+get much worse. In special, $R^2$ is around 0.49. Figure \ref{fig:r2-test-lag}
+presents how the linear models performs badly when the first lags are removed.
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.45\textwidth]{r2_test_per_lag.eps}
+    \caption{Removing all lag variables, adding only one per time, and calculating the R$^2$ in the test set.}
+    \label{fig:r2-test-lag}
+\end{figure}
+
+\begin{figure*}[!ht]
     \centering
     \includegraphics[width=\textwidth]{observed-fitting-ozone-tijuca.eps}
     \caption{Observed and predicted ozone values for different months in Tijuca.}
     \label{fig:observed-fitting-ozone-tijuca}
 \end{figure*}
+
+\vspace{2mm}
+
+{\em Elastic-net regression}
+
+\vspace{2mm}
+
+One important observation is that the interaction terms make the metrics worse
+in the pure linear regression and are disregarded for that reason. In this
+case, they improve a lot. There are 376 features considering the polynomial
+and interactions. The hyperparameters were set to $\alpha = 2$ and
+$w_{l1} = 0.9$, what force several parameters to be zero. Only 6\% of the
+variables ended to be non null. The result was interesting because all the non
+zero coefficients were related to interactions with the {\tt year} variable.
+This is related to Figure \ref{fig:time-series-gases-year}. $R^2$ in the test
+set was 0.838, a few more than the simple linear regression. The histogram of
+the residuals are similar to Figure \ref{fig:histogram-residuals-slr}, and
+skewness and kurtosis too.
+
+\begin{remark}
+    Without interaction terms, the $R^2$ was around 0.5 and $\alpha$ was
+    almost 0. 
+\end{remark}
+
+\vspace{2mm}
+
+{\em Feature selection + Linear regression}
+
+\vspace{2mm}
+
+Feature selection was performed (proper code) with 5-Fold cross validation and
+threshold equals to 0.001, that is, if the $R^2$ score improves less than
+0.001, the features stop to be added in the best subset. The chosen features
+were {\tt year * O3\_lag1}, {\tt RS}, {\tt RS * hour\_cos}, {\tt year *
+Vel\_Vento}, {\tt O3\_lag2}, {\tt year O3\_MA24}, {\tt hour\_cos \* PM10\_lag1},
+{\tt RS * Temp}, {\tt RS * O3\_lag2}, and {\tt O3\_lag1**2}. Note that it is
+very different from those selected by elastic net. All the variables had
+p-value less than 0.001, histogram similar to
+\ref{fig:histogram-residuals-slr}, and Jarque-Bera indicating non-normality.
+The $R^2$ in testing data was 0.848. 
+
+Other important consideration is that the condition number is still big:
+9.72e+03, despite being smaller than in simple regression case. After
+calculating the Pearson correlation between the best variables, {\tt O3\_lag2}
+and {\tt year * O3\_lag1} have more than 0.8, what was expected and even used.
+Some experiments were conducted to reduce this value, but none was successful.
+It appears that all variables are strongly (and linearly) related but also
+add some information to prediction (at least a subset of them). This is bad
+for the interpretation of the coefficients, since its identifiability cannot
+be proved.  
+
+\begin{remark}
+    Solar radiation had a positive coefficient, so when it increases one unit
+    of standard deviation, the ozone grows too. 
+\end{remark}
+
+\vspace{2mm}
+
+{\em Support Vector Regression}
+
+\vspace{2mm}
+
+\subsubsection{CO}
 
 \subsubsection{PM\texorpdfstring{$_{10}$}{10}}
 
@@ -61,11 +141,11 @@ get much worse. In special, $R^2$ is around 0.49.
 
 \subsection{Aggregated results}
 
-\subsubsection{CO}
-
 \subsubsection{O\texorpdfstring{$_3$}{3}}
 
 \subsubsection{PM\texorpdfstring{$_{10}$}{10}}
+
+\subsubsection{CO}
 
 \subsubsection{AIQ}
 
@@ -75,24 +155,8 @@ Here, we want to make predictions about pollutant levels at other not measured
 sites. Given that each location has a specific model, the prediction
 is the weighted mean regarding each prediction 
 
-
-
 \begin{enumerate}
-    \item 1 modelo para cada gás e cada estação. 
-    \item Temos 7 opções de modelos até o momento (analisando friamente, 23 x
-    7 = 161 modelos a serem fittados e analisados). 
-    \item Como realizar tantos experimentos para cada modelo de forma
-    automática? \com{A ideia é escrever um código para escolha de hiperparâmetros e
-    reporte de resultados automaticamente.}
-    \item Pegar uma estação para analisar os resultados mais cuidadosamente. 
-    \item Testes de significância.  
-\end{enumerate}
-
-Lembrar de 
-
-\begin{enumerate}
-    \item Testar estacionaridade de cada série; 
-    \item Lembrar de inverter os dados pelo power transformation: ler p2, fazer power transform. 
+    \item Testar estacionaridade de cada série;
 \end{enumerate}
 
 

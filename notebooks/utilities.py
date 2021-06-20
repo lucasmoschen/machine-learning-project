@@ -2,6 +2,9 @@
 
 import json
 import os
+from sklearn.model_selection import KFold
+from sklearn.metrics import r2_score as r2
+import numpy as np
 
 class Utilities: 
 
@@ -48,4 +51,44 @@ class Utilities:
         print("RMSE test set: {}".format(rmse_test))
 
 
+    def forward_selection(self, data, target, regr, k_fold, threshold):
+
+        kf = KFold(n_splits=k_fold)
+        features = data.columns.tolist()
+        best_features = []
+
+        r2_general = 0.0
+
+        while len(features) > 0:
+
+            max_r2 = -np.inf
+            for feat in features: 
+
+                X = data[best_features + [feat]]
+                r2_error = 0
+                for n, (train_index, validation_index) in enumerate(kf.split(data)):
+
+                    x_train, x_test = X.iloc[train_index], X.iloc[validation_index]
+                    y_train, y_test = target.iloc[train_index], target.iloc[validation_index]
+
+                    regr.fit(x_train, y_train)
+                    y_pred = regr.predict(x_test)
+                    r2_error = (n*r2_error + r2(y_test, y_pred))/(n+1)
+                
+                if r2_error > max_r2: 
+                    max_r2 = r2_error
+                    chosen_feature = feat
+            
+            best_features.append(chosen_feature)
+            features.remove(chosen_feature)
+
+            text = "The maximum R2 until now is {} with {} featur{}."
+            additional = 'es' if len(best_features) > 1 else 'e'
+            print(text.format(max_r2, len(best_features), additional), end = "\r")
+
+            if max_r2 - r2_general < threshold:
+                break
+            else: 
+                r2_general = max_r2
         
+        return best_features
