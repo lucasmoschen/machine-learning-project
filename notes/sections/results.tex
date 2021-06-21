@@ -7,7 +7,8 @@ considering all the stations. This is done because we have more than
 a hundred models to analyse. To deal with this diversity, the steps
 (hyperparameters choice and evaluation) are automated. We are
 making predictions one hour ahead and it is possible to compare with one day
-ahead models. 
+ahead models. After this, we will have a best model for each gas and each
+station (23 on total). 
 
 \subsection{Tijuca monitoring station}
 
@@ -45,7 +46,7 @@ observed ozone gets, the more underestimated the prediction is.
     \label{fig:histogram-residuals-slr}
 \end{figure}
 
-\begin{figure}[!hb]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.45\textwidth]{observed-vs-residuals-linear-regression.eps}
     \caption{Simple linear regression residuals plotted against
@@ -132,6 +133,45 @@ be proved.
 {\em Support Vector Regression}
 
 \vspace{2mm}
+
+We remember that this model is computationally very costly, so its optimality
+is not reached. From the cross validation, the best hyperparameters were
+$\epsilon = 0.2$ and $C = 1.0$. With these values, we perform the linear SVR and
+the SVR with kernel RBF only to compare them (it is practically
+impossible to handle this amount of data with grid search when RBF kernel is
+used in only one computer).
+
+Setting those parameters, SVR with kernel RBF took 6min 28s (CPU time), while
+Linear SVR 13.1s (CPU time). With RBF kernel, the $R^2$ in testing data was 0.78 and
+with linear, it was 0.839. Looking at $R^2$ in training data, we observe that
+the non-linear kernel suffered with over-fitting. Residues have not changed
+much from the latest graphs, neither kurtosis nor skewness.
+
+Considering the dataset with polynomial and interaction terms, we used the
+best features chosen by Forward Feature Selection in the linear regression case. The
+$R^2$ in testing data grew to 0.848 (the same as in the linear regression
+case). The hyperparameters were not changed because a grid search did not
+change. Feature selection could be done with this model too, but it would be
+too costly. Finally, the SVR with RBF kernel was performed with the best
+features. The $R^2$ in testing set was 0.851. 
+
+\vspace{2mm}
+
+{\em Random Forest} 
+
+\vspace{2mm}
+
+This algorithm is also very costly for large datasets, specially caused by the
+choice of $s$ or other parameters, such as, max depth. This makes it harder to
+do grid search to choose the best parameters. First, we consider that $s \in
+\{10, 20, 50, 100\}$, $c \in \{0.0, 0.0001, 0.001, 0.01, 0.1, 1\}$, and $B =
+100$. The chosen parameters were $s = 10$ and $c = 0$ (no regularization).
+With this setting, $R^2$ in testing set was 0.848. From this result, we change
+the the grid search to $s \in
+\{2, 5, 8\}$ and $c \in \{0.0, 0.01, 1\}$. As expected, the selected were $c =
+0.0$ and $s = 2$. However, despite needing more time, the $R^2$ in the testing
+set did not improve. 
+
 
 \subsubsection{CO}
 

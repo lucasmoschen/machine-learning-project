@@ -39,8 +39,14 @@ scikit-learn}. For that reason, we
 suppose a linear kernel. The loss function considered is $\mathcal{L}_1$ loss,
 with parameter $\epsilon$. A regularization parameter $C$ is also added to the
 model, such that, $C$ is inversely proportional to the strength of the
-regularization. The parameters are also calibrated with cross validation (5-Fold). All
-columns are scaled to have mean 0 and variance 1. 
+regularization. All columns are scaled to have mean 0 and variance 1. 
+The parameters are calibrated with cross validation (5-Fold), with 
+$C \in \{10^{-3}, 10^{-2}, ..., 10^2\}$ and $\epsilon =
+\{0.001, 0.01, 0.1, 0.2, 0.3\}$. The problem with that approach is that there
+will be 150 fittings + 150 predictions. If we set the maximum number of
+iterations to be 5000, the program does not converge, but each of the fitting
+takes 1min, what is impractical. For that reason, this model is very
+problematic. 
 
 \subsection{Random Forest}
 
@@ -81,7 +87,7 @@ Therefore the considered models and hyperparameters are the following:
     loss, and $C$ the regularization term. The variables are transformed
     between 0 and 1. 
     \item Random Forest: all predictors, $B$ bootstrap samples, $c$ is the
-    complexity parameter, and $s$ is the minimum number of samples. 
+    complexity parameter, and $s$ is the minimum number of samples to split. 
     \item Linear regression + missing data imputation: no additional
     parameters. 
 \end{enumerate}

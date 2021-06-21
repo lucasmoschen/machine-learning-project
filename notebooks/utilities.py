@@ -5,6 +5,8 @@ import os
 from sklearn.model_selection import KFold
 from sklearn.metrics import r2_score as r2
 import numpy as np
+import pandas as pd
+from sklearn.preprocessing import PowerTransformer
 
 class Utilities: 
 
@@ -92,3 +94,59 @@ class Utilities:
                 r2_general = max_r2
         
         return best_features
+    
+    def linear_regression_em_preparation(self, location): 
+        """
+        All preparations with no missing value imputation.
+        """
+        
+        air_data = pd.read_csv(location + "RiodeJaneiro_MonitorAr_hourly_p1.csv", index_col = 0)
+        air_data.Data = pd.to_datetime(air_data.Data) 
+
+        air_data = air_data[air_data.year < 2020]
+
+        air_data["weekend"] = (air_data.Data.dt.weekday >= 5).astype(int)
+        air_data["season"] = (air_data.month - 1)// 3
+        air_data.season += (air_data.month == 3)&(air_data.day>=20)
+        air_data.season += (air_data.month == 6)&(air_data.day>=21)
+        air_data.season += (air_data.month == 9)&(air_data.day>=23)
+        air_data.season += (air_data.month == 12)&(air_data.day>=21)
+        air_data.season = air_data.season%4 
+
+        air_data["hour_sin"] = np.sin(air_data.hour*(2*np.pi/24))
+        air_data["hour_cos"] = np.cos(air_data.hour*(2*np.pi/24))
+
+        var_continuous = ['Chuva', 'Pres', 'RS', 'Temp', 'UR', 'Dir_Vento', 'Vel_Vento', 'CO', 'O3', 'PM10']
+        pt = PowerTransformer(method = 'yeo-johnson', standardize=True).fit(air_data[var_continuous])
+        transform_air_data = pt.transform(air_data[var_continuous])
+
+        air_data[var_continuous] = transform_air_data
+
+        air_data.sort_values(["year", "month", "day", "hour"], inplace = True)
+
+        datas = air_data.Data.unique()
+        map_train_test = {date: date <= datas[int(0.7*datas.shape[0])+1] for date in datas}
+
+        air_data["train"] = air_data.Data.map(map_train_test)
+
+        for gas in ["CO", "O3", "PM10"]:
+            for lag in ["1","2","24"]: 
+                air_data[gas+"_lag"+lag] = air_data[gas]
+            air_data[gas+"_MA24"] = air_data[gas]
+
+        for station in range(1,9):
+            for gas in ["CO", "O3", "PM10"]: 
+                for lag in [1,2,24]:
+                    df =  air_data.loc[air_data.CodNum == station, gas+"_lag"+str(lag)].shift(lag)
+                    air_data.loc[air_data.CodNum == station, gas+"_lag"+str(lag)] = df
+                df = air_data.loc[air_data.CodNum == station, gas+"_MA24"].rolling(window = 24).mean()
+                air_data.loc[air_data.CodNum == station, gas+"_MA24"] = df
+
+        air_data.drop(columns=["Data", "hour"], inplace=True)
+        
+        df_train = air_data[air_data.train].drop(columns='train')
+        x_train = df_train.drop(columns=["O3", 'CO', 'PM10', 'Lat', 'Lon'])
+        x_train_SP = x_train[x_train.CodNum == 8].drop(columns="CodNum")
+        x_train_SP['O3'] = df_train[df_train.CodNum==8].O3
+        
+        return x_train_SP
