@@ -172,6 +172,50 @@ the the grid search to $s \in
 0.0$ and $s = 2$. However, despite needing more time, the $R^2$ in the testing
 set did not improve. 
 
+\vspace{2mm}
+
+{\em Linear regression with missing data} 
+
+\vspace{2mm}
+
+The problem with this approach is the absence of a predictive frame. Despite
+estimating the parameters, the prediction is not straightforward since the
+data has missing values. To handle this problem, the data with imputation (as
+explained in Section \ref{sec:data-preprocessing}) served to predict values.
+The first thing we should note is that the para meters are different from
+the linear regression with fixed imputation, but not so much. The ratio
+between the estimated parameters ranged according to Figure
+\ref{fig:boxplot-linear-regression}. 
+
+The $R^2$ in the testing set was 0.84, a little better than in the simple
+linear regression case. Considering the best features with polynomial and
+interactions terms, the $R^2$ was 0.847.
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{boxplot_ratio_linear_regression.eps}
+    \caption{Boxplot with the ratios of the parameters from linear regression
+    with imputation for the parameters with no imputation.}
+    \label{fig:boxplot-linear-regression}
+\end{figure}
+
+\vspace{2mm}
+
+{\em Model comparison} 
+
+\vspace{2mm}
+
+The best model was the SVR with RBF kernel and the best features
+(selected by linear model) regarding the three metrics. Figure
+\ref{fig:model-comparison-ozone-tijuca} presents the results for RMSE. Observe
+the range in y axis goes from 0.2 to 0.36 to emphasize the difference.
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{model-comparison-ozone-tijuca.eps}
+    \caption{Comparison among the models for ozone concentration at Tijuca monitoring station.}
+    \label{fig:model-comparison-ozone-tijuca}
+\end{figure}
 
 \subsubsection{CO}
 
