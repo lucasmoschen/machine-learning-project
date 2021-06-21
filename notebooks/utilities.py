@@ -95,12 +95,12 @@ class Utilities:
         
         return best_features
     
-    def linear_regression_em_preparation(self, location): 
+    def linear_regression_em_preparation(self, file_place, gas_name='O3', loc = 8): 
         """
         All preparations with no missing value imputation.
         """
         
-        air_data = pd.read_csv(location + "RiodeJaneiro_MonitorAr_hourly_p1.csv", index_col = 0)
+        air_data = pd.read_csv(file_place + "RiodeJaneiro_MonitorAr_hourly_p1.csv", index_col = 0)
         air_data.Data = pd.to_datetime(air_data.Data) 
 
         air_data = air_data[air_data.year < 2020]
@@ -146,7 +146,7 @@ class Utilities:
         
         df_train = air_data[air_data.train].drop(columns='train')
         x_train = df_train.drop(columns=["O3", 'CO', 'PM10', 'Lat', 'Lon'])
-        x_train_SP = x_train[x_train.CodNum == 8].drop(columns="CodNum")
-        x_train_SP['O3'] = df_train[df_train.CodNum==8].O3
+        x_train_SP = x_train[x_train.CodNum == loc].drop(columns="CodNum")
+        x_train_SP[gas_name] = df_train[df_train.CodNum==8][gas_name]
         
         return x_train_SP
