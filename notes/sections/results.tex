@@ -343,7 +343,7 @@ The ratio between the estimated parameters ranged according to Figure
 \ref{fig:boxplot-co-linear-regression}, showing a similar estimation in most cases. The $R^2$ in the testing set was
 0.849, same as in the simple
 linear regression case. Considering the best features with polynomial and
-interactions terms, the $R^2$ was 0.852.
+interactions terms, the $R^2$ was 0.852. 
 
 \begin{figure}
     \centering
@@ -537,13 +537,47 @@ presents the observed groups, which includes bad quality.
 After studying the models with Tijuca station, we now apply to other stations
 and report the results. The models tested will keep the same hyperparameters,
 since the computation time would take too much longer. The considered models
-are the three best for each pollutant. Table XXX sumarizes de results.  
+are the three best for each pollutant. Table \ref{tab:summary-results}
+sumarizes the results. The results for PM$_{10}$ in most cases showed the
+best model for Tijuca is not for other locations. For CO and O$_3$ the results
+had similar behavior. 
 
-\subsection{Model for other locations}
-
-Here, we want to make predictions about pollutant levels at other not measured
-sites. Given that each location has a specific model, the prediction
-is the weighted mean regarding each prediction 
+\begin{table*}
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+            \hline
+         Gases  & \multicolumn{4}{c|}{\textbf{O$_3$}}                                & \multicolumn{4}{c|}{\textbf{CO}}                                 & \multicolumn{4}{c|}{\textbf{PM$_{10}$}}                                                                                        \\\hline
+\textbf{Stations}           & \textbf{Method}   & \textbf{R$^2$} & \textbf{MAE} & \textbf{RMSE} & \textbf{Method} & \textbf{R$^2$} & \textbf{MAE} & \textbf{RMSE} & \textbf{Method}   & \textbf{R$^2$} & \textbf{MAE} & \textbf{RMSE} \\\hline
+\multirow{3}{*}{\textbf{1}} & \textbf{SVR-RBF*} & 0.807          & 0.209        & 0.281         & \textbf{RF*}    & 0.668          & 0.248        & 0.367         & \textbf{RF}      & 0.771                              & 0.234                            & 0.315                             \\
+            & \textbf{LR+EM*}   & 0.492          & 0.352        & 0.456         & \textbf{SVR-L*} & 0.643          & 0.257        & 0.381         & \textbf{SVR-L}   & 0.775                              & 0.233                            & 0.312                             \\
+            & \textbf{SVR-L*}   & 0.816          & 0.202        & 0.274         & \textbf{LR+EM*} & 0.639          & 0.267        & 0.383         & \textbf{SVR-RBF*} & 0.769                              & 0.235                            & 0.316                             \\\hline
+\multirow{3}{*}{\textbf{2}} & \textbf{SVR-RBF*} & 0.892          & 0.196        & 0.283         & \textbf{RF*}    & 0.770          & 0.251        & 0.350         & \textbf{RF}      & 0.777                              & 0.361                            & 0.493                             \\
+            & \textbf{LR+EM*}   & 0.714          & 0.351        & 0.461         & \textbf{SVR-L*} & 0.777          & 0.244        & 0.345         & \textbf{SVR-L}   & 0.782                              & 0.353                            & 0.487                             \\
+            & \textbf{SVR-L*}   & 0.881          & 0.207        & 0.297         & \textbf{LR+EM*} & 0.778          & 0.241        & 0.344         & \textbf{SVR-RBF*} & 0.766                              & 0.365                            & 0.505                             \\\hline
+\multirow{3}{*}{\textbf{3}} & \textbf{SVR-RBF*} & 0.827          & 0.250        & 0.346         & \textbf{RF*}    & 0.861          & 0.216        & 0.298         & \textbf{RF}      & 0.761                              & 0.313                            & 0.411                             \\
+            & \textbf{LR+EM*}   & 0.518          & 0.443        & 0.578         & \textbf{SVR-L*} & 0.860          & 0.215        & 0.299         & \textbf{SVR-L}   & 0.773                              & 0.305                            & 0.401                             \\
+            & \textbf{SVR-L*}   & 0.832          & 0.248        & 0.341         & \textbf{LR+EM*} & 0.858          & 0.217        & 0.301         & \textbf{SVR-RBF*} & 0.746                              & 0.321                            & 0.425                             \\\hline
+\multirow{3}{*}{\textbf{4}} & \textbf{SVR-RBF*} & 0.909          & 0.198        & 0.276         & \textbf{RF*}    & 0.833          & 0.235        & 0.324         & \textbf{RF}      & 0.757                              & 0.304                            & 0.413                             \\
+            & \textbf{LR+EM*}   & 0.743          & 0.354        & 0.464         & \textbf{SVR-L*} & 0.826          & 0.235        & 0.331         & \textbf{SVR-L}   & 0.758                              & 0.300                            & 0.412                             \\
+            & \textbf{SVR-L*}   & 0.900          & 0.210        & 0.290         & \textbf{LR+EM*} & 0.825          & 0.238        & 0.332         & \textbf{SVR-RBF*} & 0.742                              & 0.311                            & 0.425                             \\\hline
+\multirow{3}{*}{\textbf{5}} & \textbf{SVR-RBF*} & 0.886          & 0.223        & 0.303         & \textbf{RF*}    & 0.800          & 0.253        & 0.347         & \textbf{RF}      & 0.781                              & 0.341                            & 0.451                             \\
+            & \textbf{LR+EM*}   & 0.668          & 0.401        & 0.516         & \textbf{SVR-L*} & 0.790          & 0.257        & 0.356         & \textbf{SVR-L}   & 0.800                              & 0.321                            & 0.431                             \\
+            & \textbf{SVR-L*}   & 0.884          & 0.224        & 0.305         & \textbf{LR+EM*} & 0.781          & 0.263        & 0.363         & \textbf{SVR-RBF*} & 0.769                              & 0.342                            & 0.463                             \\\hline
+\multirow{3}{*}{\textbf{6}} & \textbf{SVR-RBF*} & 0.916          & 0.158        & 0.235         & \textbf{-}      & \textbf{-}     & \textbf{-}   & \textbf{-}    & \textbf{RF}      & 0.782                              & 0.357                            & 0.482                             \\
+            & \textbf{LR+EM*}   & 0.755          & 0.297        & 0.401         & \textbf{-}      & \textbf{-}     & \textbf{-}   & \textbf{-}    & \textbf{SVR-L}   & 0.777                              & 0.362                            & 0.488                             \\
+            & \textbf{SVR-L*}   & 0.911          & 0.160        & 0.242         & \textbf{-}      & \textbf{-}     & \textbf{-}   & \textbf{-}    & \textbf{SVR-RBF*} & 0.789                              & 0.351                            & 0.475                             \\\hline
+\multirow{3}{*}{\textbf{7}} & \textbf{SVR-RBF*} & 0.868          & 0.270        & 0.371         & \textbf{RF*}    & 0.784          & 0.289        & 0.424         & \textbf{RF}      & 0.741                              & 0.362                            & 0.482                             \\
+            & \textbf{LR+EM*}   & 0.655          & 0.456        & 0.599         & \textbf{SVR-L*} & 0.770          & 0.291        & 0.437         & \textbf{SVR-L}   & 0.751                              & 0.354                            & 0.474                             \\
+            & \textbf{SVR-L*}   & 0.866          & 0.271        & 0.374
+            & \textbf{LR+EM*} & 0.765          & 0.301        & 0.442
+            & \textbf{SVR-RBF*} & 0.726                              & 0.370
+            & 0.496 \\\hline
+\end{tabular}
+    }
+    \caption{Summary results in the testing set for each station and each gas. LR = Linear Regression, SVR-L = SVR with linear kernel, RF = Random Forest, and * when best features are used.}
+    \label{tab:summary-results}
+\end{table*}
 
 \section{Discussion and future work}
 \label{sec:discussion}
