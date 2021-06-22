@@ -2,29 +2,21 @@
 \label{sec:introduction}
 
 \BL{A}ir quality is a growing concern and area
-of research, because most of the cities world-wide have been facing problems with it in
+of research because most cities worldwide have been facing problems with it in
 the past few decades \cite{mayer1999}. The rapid increase of the urban
-population and the development of the cities is causing environmental
-pollution, what can give rise to damage on human health. 
+population and the development of the centers is causing environmental
+pollution, which can give rise to damage to human health. 
 
-The emission and
-transmission of air pollutants, such as, Nitrogen dioxide (NO$_2$), Carbon
-monoxide (CO), Ozone (O$_3$)
-and, Particulate Matter (PM), result in the ambient air pollution, which can be
-caused by different factors. The World Health
+The emission and transmission of air pollutants, such as, for example, Nitrogen dioxide (NO$_2$), Carbon monoxide (CO), Ozone (O$_3$) and, Particulate Matter (PM), result in ambient air pollution and are caused by different factors. The World Health
 Organization (WHO) explained \cite{who2006} that PM, O$_3$, and NO$_2$ have, respectively, the
-strongest effects on health of air quality.
+heaviest effects on human health.
 
-In Rio de Janeiro city, the city hall recognized the problem and created the
-Program MonitorAr-Rio in 2008 \cite{relatorio2011}. The objective was to
-monitor the air quality in the city, in order to verify the degree of exposure
-of the population to the pollutants, and inform the results to the population.
-Eight fixed stations monitor the main pollutants defined in the legislation,
-and some meterological conditions, such as, for example, temperature, relative
-humidity, solar radiation, and wind. 
+In Rio de Janeiro, the city hall recognized the problem and created the
+Program MonitorAr-Rio in 2008 \cite{relatorio2011}. The objective was to monitor the air quality, verify the degree of exposure of the population to the pollutants, and inform the community of the results.
+Eight fixed stations monitor the pollutants defined in the legislation,
+and some meteorological conditions, such as, for example, temperature, relative humidity, solar radiation, and wind. 
 
-It is important to have updated knowledge and accurate predictions of the
-air pollutants, in order to help the formulation of public health and
+It is fundamental to have up-to-date knowledge and accurate predictions of air pollutants to assist in the formulation of public health and
 environmental policies. This study proposes models for hourly air
 quality forecasting for the city of Rio de Janeiro. 
 
@@ -36,19 +28,19 @@ work and an exploratory data analysis with the
 data path. Section \ref{sec:experiments} presents the
 methods used and the experiments related to each one. Sections
 \ref{sec:results}, \ref{sec:discussion}, and \ref{sec:conclusion} end the text
-with main results and conclusions. 
+with the main results and conclusions. 
 
 
 \section{Problem definition}
 \label{sec:problem-definition}
 
 \BL We want to produce time predictions of some pollutants [See Section
-\ref{sec:polluting-gases} for a detailed description] for the Rio de Janeiro
+\ref{sec:polluting-gases} for a detailed description] for Rio de Janeiro
 city, considering the weather, location, and time variables. We also want to
 develop a method for estimating the air quality of not monitored regions by
 the program based on the monitored ones.
 
-Let $Y_i$ be the random
+Let $Y_i$ be a random
 variable indicating the quantity of i$^{th}$ pollutant measured in a specific
 monitoring station, for instance, the quantity of ozone. If $\bb{X} \in \mathcal{X}
 \subseteq \R^{p}$ is the random vector of meterological conditions measured,
@@ -65,5 +57,4 @@ and
 $$
 \bb{x}^{t_1,s}, ..., \bb{x}^{t_n,s},
 $$
-we want to predict $y_i^{\bar{t},s}$ for $\bar{t} > t_{n+1}$ and $y_i^{t,
-\tilde{s}}$ for $\tilde{s} \not \in \{s_k : k = 1,...,8\}$.
+we want to predict $y_i^{t+1, s}$.
