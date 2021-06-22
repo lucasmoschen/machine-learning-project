@@ -226,7 +226,7 @@ what is pretty good when compared to the results from the ozone model. The varia
 was CO shifted by one hour, what was already expected. Other features with
 large t-statistic (absolute value more than
 20) was, in
-order, hour cos, wind speedy (again!), CO with 23 moving average, O3 with lag
+order, hour cos, wind speedy (again!), CO with 24 moving average, O3 with lag
 1, CO with lag
 2, and hour sin. Besides the hourly seasonality and wind speed, all the
 variables are related to the gases. This may be related to the fact that CO is
@@ -250,7 +250,7 @@ the model for ozone.
     \centering
     \includegraphics[width=0.45\textwidth]{observed-vs-residuals-co-linear-regression.eps}
     \caption{Simple linear regression residuals plotted against
-    observed ozone values.}
+    observed CO values.}
     \label{fig:observed-vs-residual-co-linear-regression}
 \end{figure}
 
@@ -355,6 +355,8 @@ interactions terms, the $R^2$ was 0.852.
 
 \vspace{2mm}
 
+\vspace{2mm}
+
 {\em Model comparison} 
 
 \vspace{2mm}
@@ -371,7 +373,127 @@ the range in y axis goes from 0.2 to 0.36 to emphasize the difference.
     \label{fig:model-comparison-co-tijuca}
 \end{figure}
 
+
 \subsubsection{PM\texorpdfstring{$_{10}$}{10}}
+
+{\em Simple linear regression}
+
+\vspace{2mm}
+
+The $R^2$ in the testing set was 0.8, worse than the previous gases. The
+variable with greater t-statistic was PM$_{10}$ shifted by one hour, what was already expected. Other features with
+large t-statistic (absolute value more than
+20) was, in
+order, CO lag 1, PM$_{10}$ with 24 moving average, CO with lag
+2, and O$_{3}$ lag 1. This indicates that the model is very poor when only
+using the meterological variables. 7 features had p-value
+greater that 0.05, a lot when compared to the previous models. The F-statistic considering all variables was practically zero. Figure \ref{fig:histogram-residuals-pm10-slr} shows
+the histogram of the residuals very similar to a normal distribution (as
+assumed by the model).The kurtosis was greater than 3, while the skewness around
+-0.05. Despite the similarity to the normal distribution, Jarque-Bera rejects
+it. The fitting result in testing data can be
+partially observed in Figure \ref{fig:observed-fitting-pm10-tijuca}.  Figure
+\ref{fig:observed-vs-residual-pm10-linear-regression} has the same behavior as
+the model for ozone.  
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{histogram_residuals_pm10_slr.eps}
+    \caption{Histogram of the residuals of simple linear regression model for PM$_{10}$.}
+    \label{fig:histogram-residuals-pm10-slr}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.45\textwidth]{observed-vs-residuals-pm10-linear-regression.eps}
+    \caption{Simple linear regression residuals plotted against
+    observed PM$_{10}$ values.}
+    \label{fig:observed-vs-residual-pm10-linear-regression}
+\end{figure}
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{observed-fitting-pm10-tijuca.eps}
+    \caption{Observed and predicted PM$_{10}$ values for different months in Tijuca.}
+    \label{fig:observed-fitting-pm10-tijuca}
+\end{figure*}
+
+\vspace{2mm}
+
+{\em Elastic-net regression}
+
+\vspace{2mm}
+
+The hyperparameters were set to $\alpha = 3$
+and $w_{l1} = 1$, that is only $\mathcal{L}_1$ penalty. Only 5.8\% of the
+variables ended to be non null, and all were related to interactions with
+year. $R^2$ in the test set was 0.797.
+
+\vspace{2mm}
+
+{\em Feature selection + Linear regression}
+
+\vspace{2mm}
+
+The chosen features for this model by forward selection were {\tt
+PM10\_lag1}, {\tt year PM10\_MA24},
+{\tt hour\_cos}, {\tt O3\_lag1}, {\tt year O3\_lag2}, {\tt CO\_MA24}, {\tt
+hour\_sim hour\_cos}, {\tt year Temp}, {\tt RS O3\_lag2}\ and {\tt O3\_lag**2}
+. All the variables had p-value less than 0.001, histogram similar to
+\ref{fig:histogram-residuals-pm10-slr}, and Jarque-Bera indicating non-normality.
+The $R^2$ in testing data was 0.79, worst then above.
+
+\vspace{2mm}
+
+{\em Support Vector Regression}
+
+\vspace{2mm}
+
+From the cross validation, the best hyperparameters were
+$\epsilon = 0.01$ and $C = 0.1$. With these values, we perform the linear SVR and
+the SVR with kernel RBF. SVR with kernel RBF took 2min 52s (CPU time), while Linear SVR 1.52s (CPU time). With RBF kernel, the $R^2$ in testing data was 0.783 and
+with linear, it was 0.8. Residues have not changed much from the latest graphs, neither kurtosis nor skewness.
+
+Considering the dataset with polynomial and interaction terms, we used the
+best features chosen by Forward Feature Selection in the linear regression case. The
+$R^2$ in testing data grew to 0.793. SVR with RBF kernel got worse to 0.798. 
+
+\vspace{2mm}
+
+{\em Random Forest} 
+
+\vspace{2mm}
+
+The chosen parameters were $s = 10$ and $c = 0$ (no regularization).
+With this setting, $R^2$ in testing set was 0.803. From this result, we change
+the the grid search to $s \in
+\{2, 5, 8\}$ and $c \in \{0.0, 0.01, 1\}$. The selected were $c =
+0.0$ and $s = 5$, with the same cross validation score. Considering
+polynomial terms and the best features, the result was 0.791. 
+
+\vspace{2mm}
+
+{\em Linear regression with missing data} 
+
+\vspace{2mm}
+
+The $R^2$ in the testing set was 0.794 and with the best features from
+polynomial and interactions terms, the $R^2$ was 0.79.
+
+{\em Model comparison} 
+
+\vspace{2mm}
+
+The best model was random forest regarding the three metrics. Figure
+\ref{fig:model-comparison-pm10-tijuca} presents the results for RMSE. Observe
+the range in y axis goes from 0.2 to 0.4 to emphasize the difference.
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{model-comparison-pm10-tijuca.eps}
+    \caption{Comparison among the models for PM$_{10}$ concentration at Tijuca monitoring station.}
+    \label{fig:model-comparison-pm10-tijuca}
+\end{figure}
 
 \subsubsection{AIQ}
 
