@@ -495,17 +495,49 @@ the range in y axis goes from 0.2 to 0.4 to emphasize the difference.
     \label{fig:model-comparison-pm10-tijuca}
 \end{figure}
 
-\subsubsection{AIQ}
+\subsubsection{AQI}
+
+In order to predict AQI, we use the best model for each pollutant
+chosen previously and calculate it as explained in Section
+\ref{sec:aiq}. The $R^2$ in testing set was 0.746, lower than the three
+methods separated. This may be related to the underestimated pollutant levels
+showed in Figures \ref{fig:observed-fitting-ozone-tijuca},
+\ref{fig:observed-fitting-co-tijuca}, and
+\ref{fig:observed-fitting-pm10-tijuca}. Figure
+\ref{fig:observed-vs-predicted-aqi} presents this fact. Note that several
+points are below the red line, which indicates the underestimation of the
+model's prediction. Looking at the predictions groups, Figure
+\ref{fig:aqitime} presents the levels of air quality. Good and moderated
+levels dominate all over the time. However Figure \ref{fig:aqitime-observed}
+presents the observed groups, which includes bad quality. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{observed-vs-predicted-aiq.eps}
+    \caption{Comparing the AQI calculated by observed pollutants and predicted. Points below the red line indicate underestimated predictions.}
+    \label{fig:observed-vs-predicted-aqi}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{aiq-time.eps}
+    \caption{Composition of AQI classes predicted in Tijuca: Year-based and Month-based.}
+    \label{fig:aqitime}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{aiq-time-observed.eps}
+    \caption{Composition of AQI classes observed in Tijuca: Year-based and Month-based.}
+    \label{fig:aqitime-observed}
+\end{figure}
 
 \subsection{Aggregated results}
 
-\subsubsection{O\texorpdfstring{$_3$}{3}}
-
-\subsubsection{PM\texorpdfstring{$_{10}$}{10}}
-
-\subsubsection{CO}
-
-\subsubsection{AIQ}
+After studying the models with Tijuca station, we now apply to other stations
+and report the results. The models tested will keep the same hyperparameters,
+since the computation time would take too much longer. The considered models
+are the three best for each pollutant. Table XXX sumarizes de results.  
 
 \subsection{Model for other locations}
 
@@ -513,13 +545,7 @@ Here, we want to make predictions about pollutant levels at other not measured
 sites. Given that each location has a specific model, the prediction
 is the weighted mean regarding each prediction 
 
-\begin{enumerate}
-    \item Testar estacionaridade de cada série;
-\end{enumerate}
-
-
-
-\section{Discussion and Future work}
+\section{Discussion and future work}
 \label{sec:discussion}
 
 

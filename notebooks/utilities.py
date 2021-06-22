@@ -147,6 +147,6 @@ class Utilities:
         df_train = air_data[air_data.train].drop(columns='train')
         x_train = df_train.drop(columns=["O3", 'CO', 'PM10', 'Lat', 'Lon'])
         x_train_SP = x_train[x_train.CodNum == loc].drop(columns="CodNum")
-        x_train_SP[gas_name] = df_train[df_train.CodNum==8][gas_name]
+        x_train_SP[gas_name] = df_train[df_train.CodNum==loc][gas_name]
         
         return x_train_SP
