@@ -19,23 +19,23 @@ The CO gas has more missing values than the other gases because Pedra de
 Guaratiba does not measure it. When this kind of absent value is disregarded,
 CO has around 6\%. Imputation methods in Section \ref{sec:data-preprocessing}.
 
-Almost 91\% of the values in the {\tt Chuva} column and 26\% of the {\tt RS} column are zero. If we consider the accumulated monthly amount of
+Almost 91\% of the values in {\tt Chuva} column and 26\% in {\tt RS} column are zero. If we consider the accumulated monthly amount of
 rain, it seems to make sense, and it is comparable to other sources. 
 
 We did not observe any pattern of missing values per year or monitoring
 station. In 2012, over half of the wind information is missing, however other
-features are stable. However, after 2016, UR dominates the number of absent
+features are stable. After 2016, UR dominates the number of absent
 data. If we aggregate by time (hour, day, month, and year), and sum up the
 values of the features of each station, there are less missing data,
-proportionally, what. This
-implies other stations can provide useful information. 
+proportionally. This
+implies that other stations can provide useful information. 
 
 \begin{table*}[t]
     \centering
     \begin{tabular}{c|c|c|c|}
         \cline{2-4}
        & \textbf{Name} & \textbf{Type} & \textbf{Description}              \\ \hline
-        \multicolumn{1}{|c|}{\multirow{7}{*}{\textbf{Meterological conditions}}} & Chuva         & float         & Rainfall (mm)                     \\ \cline{2-4} 
+        \multicolumn{1}{|c|}{\multirow{7}{*}{\textbf{meteorological conditions}}} & Chuva         & float         & Rainfall (mm)                     \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Pres          & float         & Atmospheric Pressure (mbar)       \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & RS            & float         & Solar radiation (w/m2)            \\ \cline{2-4} 
         \multicolumn{1}{|c|}{}                                                   & Temp          & float         & Temperature (°C)                  \\ \cline{2-4} 
@@ -100,7 +100,7 @@ implies other stations can provide useful information.
 Table \ref{tab:statistics-variables} contains the summary statistics of the variables. The high skewness and kurtosis from {\tt
 Chuva} column reaffirm the heavy tails of its distribution, or the presence of
 outliers. The same occurs with {\tt Press}. This is interesting because, it is common to see days with
-extreme values in meterological variables. In particular, the only hours with
+extreme values in meteorological variables. In particular, the only hours with
 precipitation greater than 100 mm were in May 2020 in Tijuca, what is
 confirmed by weather references \cite{climatempo}. CO and PM$_{10}$ have high
 kurtosis also and, therefore, can have outliers. 
@@ -143,20 +143,20 @@ kurtosis also and, therefore, can have outliers.
         &      -0.97 &      47.30 &      24.85 &       3.71 &      38.67 \\
         \hline
     \end{tabular}
-    \caption{Statistics of the meterological variables and gases.}
+    \caption{Statistics of the meteorological variables and gases.}
     \label{tab:statistics-variables}
 \end{table*}
 
 
 The time series of the three gases are presented in Figure
-\ref{fig:time-series-gases}. It indicates an increase in ozone levels during the
-years and a season effect, what corroborates on the way ozone is formed.  It
-also seems there is a reduction in variability in CO and PM$_{10}$ levels. The
-year of 2020 show a reduction in CO apparently, what is explained by the
+\ref{fig:time-series-gases}. It indicates growth in ozone levels during the
+years and a seasonal effect, which corroborates the way ozone is formed.  It
+also seems there is a decrease in variability in CO and PM$_{10}$ levels. The
+year 2020 shows a reduction in CO apparently, which is explained by the
 Coronavirus pandemic. 
 
 We confirm the tendencies of PM$_{10}$ and O$_3$ in Figure \ref{fig:time-series-gases-year}. It is important to note that
-2021 is not finished, so season effects are not complete yet.
+2021 is not finished, so seasonal effects are not complete yet.
 
 \begin{figure}[!ht]
     \centering
@@ -166,7 +166,7 @@ We confirm the tendencies of PM$_{10}$ and O$_3$ in Figure \ref{fig:time-series-
 \end{figure}
 
 By Figure \ref{fig:histogram-obs-years}, years 2011 and 2021 have less
-observation than the others. The year 2021 did not end as previously
+observations than the others. The year 2021 did not end as previously
 mentioned and the year 2011 had less monitoring stations.  
 
 \begin{figure}
@@ -180,7 +180,7 @@ mentioned and the year 2011 had less monitoring stations.
 Figure \ref{fig:correlation-features} shows an overview of the correlations
 between different features of the data to identify possible linear relations.
 The scatter plots of two to two features represents it with more details, but
-there much data, and the image has a large size. It does not present anything
+there is much data, and the image has a large size. It does not present anything
 much different, though. The variables {\tt Temp}, {\tt UR}, and {\tt RS} are
 strongly linearly related with absolute correlation greater than 0.6.
 
@@ -192,7 +192,7 @@ strongly linearly related with absolute correlation greater than 0.6.
     \label{fig:correlation-features}
 \end{figure*}
 
-Figure \ref{fig:hourly-boxplot-ozone} shows an interesting behavior of the ozone during the day. For each hour of the day, we represent the distribution of ozone in the respective hour. We
+Figure \ref{fig:hourly-boxplot-ozone} shows an interesting behavior of ozone during the day. For each hour of the day, we represent the distribution of ozone in the respective hour. We
 observe that (1) the pollutants have heavy tail, or this data has a lot of
 outliers; and (2) the medians go along with the movement of the sun.
 
@@ -211,13 +211,13 @@ outliers; and (2) the medians go along with the movement of the sun.
 \subsection{Data preprocessing}
 \label{sec:data-preprocessing}
 
-The data preprocessing is an important step before the usage of machine
+The data preprocessing is an essencial step before the usage of machine
 learning algorithms, in order to report robust and neat results. Data from
 year 2020 and 2021 will be removed given the pandemic in the world. 
 
 \subsubsection{Seasonal and time features}
 
-From the variable {\tt Data}, it is extracted the variables {\tt year, month,
+From variable {\tt Data}, it is extracted the variables {\tt year, month,
 day}, {\tt hour}, a boolean variable indicating the weekend, and a {\tt season} variable. In
 order to consider the hourly seasonality, it is created the variables
 $\text{hour\_sin} = \sin(2\pi \text{ hour}/24)$ and $\text{hour\_cos} =
@@ -253,7 +253,7 @@ non NaN values and randomly choose 7\% of the cells to be removed (this value
 was chosen because this was observed across the entire dataset). From the simulated
 dataset with missing values, the methods impute as explained before. We
 compare the imputed sample after imputation with the sample before removal and calculate
-the mean squared error. The results for the year 2016 are above \ref{tab:result-imputation}. 
+the mean squared error. The results for the year 2016 are in Table \ref{tab:result-imputation}. 
 
 \begin{table}[!hb]
     \centering
@@ -299,7 +299,7 @@ were, approximately,
  
 \subsubsection{Feature extraction}
 
-The lag is a time gap in the series and are useful to analyse seasonality. In
+The lag is a time gap in the series and are useful to analyse seasonality and trend. In
 general, besides the influence of another variables, the past values can be
 helpful to make good predictions. An exploratory study with autocorrelation
 (ACF) and partial autocorrelation (PACF) to define the number of lag
@@ -328,7 +328,7 @@ the above processes is 32 including meteorological conditions, time-related,
 lags, moving averages, 
 and pollutants measurements.
 
-Given the high dimensionality (27 independent variables), a principal
+\com{Given the high dimensionality (27 independent variables), a principal
 component analysis (PCA) was applied to compare the results when the whole
 dataset is used. This is done only to verify if all the variables really help
-the forecasting. 
+the forecasting.}
