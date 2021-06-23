@@ -1,18 +1,16 @@
 \section{Experiment settings}
 \label{sec:experiments}
 
-We have already separated the dataset into training and testing. In this
+We have already separated the dataset into training (70\%) and testing (30\%). In this
 section we describe the methods used for the estimation: {\em Linear
-Regression}, {\em Support Vector Machine}, {\em Random Forest}, {\em
-Boosting}, and a model that handle missing data simultaneously with the
-fitting, using the {\em Expectation Maximization}. Each gas and each
-localization has its own model. 
+Regression}, {\em Support Vector Machine}, {\em Random Forest}, and a Linear Regression that handle missing data simultaneously with the
+fitting, using the {\em Expectation Maximization}. Each gas and each localization has its own model. 
 
 \subsection{Linear Regression}
 
 The first attempt was to consider linear regression. In this case, the model
 supposes that the expected value of the gases quantity (conditioned on the
-data) is a linear combination of the independent variables. 
+data) is an affine transformation of the independent variables. 
 
 First we apply the simple OLS on the whole dataset. In general this is not a
 great model, because it adds variance on the estimation and, for that reason, we consider a regularization term (elastic
@@ -27,8 +25,7 @@ Other interesting approach to do feature selection, rather than $\mathcal{L}_1$
 penalty is Forward Feature Selector. It is slower than Elastic Net, but it
 selects a best subset of features given that it adds     features in a greedy
 fashion. The estimator chooses the best feature based on
-cross-validation score (with r2 score) and it stops if the improving in the
-score is lesser than a threshold. 
+cross-validation score (with R$^2$) and it stops if the improving in the score is lesser than 1e-4. 
 
 \subsection{Support Vector Regression}
 
@@ -51,8 +48,7 @@ problematic.
 \subsection{Random Forest}
 
 The random forest regressor is an extension of decision tree with $B$
-bootstrap samples such that each split considers $m$ predictors, that is the
-root of the number of predictors. The parameter
+bootstrap samples such that each split considers $m$ predictors, that is the root of the number of predictors. The parameter
 $c$ measures the complexity parameter (minimal cost-complexity pruning).
 The criterion to measure the quality of a split is MSE, in order to reduce
 variance. The minimum number of samples required to split is the parameter
@@ -71,7 +67,10 @@ $$
 \beta = (\mu_y - \Sigma_{y,X}\Sigma_X^{-1}\mu_X, \Sigma_{y,X}\Sigma_X^{-1})^T.
 $$
 A forward variable selection in the same terms as before is applied. The data
-transformations \ref{sec:data-transform} are done without the missing data imputation.  
+transformations \ref{sec:data-transform} are done without the missing data imputation. The problem with this approach is the absence of a predictive frame. Despite
+estimating the parameters, the prediction is not straightforward since the
+data has missing values. To handle this problem, the data with imputation (as
+explained in Section \ref{sec:data-preprocessing}) served to predict values.
 
 \subsection{Summary} 
 

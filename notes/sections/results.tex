@@ -14,14 +14,14 @@ station (23 on total).
 
 The results follow the order specified in the above summary for each pollutant. 
 
-\subsubsection{O\texorpdfstring{$_3$}{3}}
+\subsubsection{Ozone}
 
 {\em Simple linear regression}
 
 \vspace{2mm}
 
-Applying the simple linear regression, the $R^2$ in the testing set was 0.837,
-what appears to be a good start fitting. The variable with greater t-statistic
+Applying simple linear regression, the $R^2$ in the testing set was 0.837,
+which appears to be a good start fitting. The variable with greater t-statistic
 was O$_3$ shifted by one hour. Other features with great t-statistic (more than
 20) was, in
 order, wind speedy, ozone lag 2, hour sin, UR, ozone lag 24, hour cos, and RS.
@@ -31,10 +31,10 @@ linearly). The shifts were expected by the autocorrelation graph. Only some few 
 F-statistic considering all variables was practically zero. One important
 problem with this approach was the very big condition number (3.4e+06) given
 the observed multicollinearity. Figure \ref{fig:histogram-residuals-slr} shows
-the histogram of the residuals very similar to a normal distribution (as
+that the histogram of the residuals is very similar to a normal distribution (as
 assumed by the model).The kurtosis was nearly 3, while the skewness around
-0.22. Jarque-Bera rejects the null hypotheses that skew and kurt are the same
-as normal distribution, however.  The fitting result in testing data can be
+0.22. Jarque-Bera rejects the null hypotheses that skewness and kurtosis are the same
+as normal distribution, though. The fitting result in testing data can be
 partially observed in Figure \ref{fig:observed-fitting-ozone-tijuca}. Looking
 at Figure  \ref{fig:observed-vs-residual-linear-regression}, as larger the
 observed ozone gets, the more underestimated the prediction is.
@@ -58,7 +58,6 @@ When the lags 1 and 2 are removed, that is, only using the lag 24, the metrics
 get much worse. In special, $R^2$ is around 0.49. Figure \ref{fig:r2-test-lag}
 presents how the linear models performs badly when the first lags are removed.
 
-
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.45\textwidth]{r2_test_per_lag.eps}
@@ -80,12 +79,11 @@ presents how the linear models performs badly when the first lags are removed.
 \vspace{2mm}
 
 One important observation is that the interaction terms make the metrics worse
-in the pure linear regression and are disregarded for that reason. In this
+in simple linear regression and are disregarded for that reason. In this
 case, they improve a lot. There are 376 features considering the polynomial
 and interactions. The hyperparameters were set to $\alpha = 2$ and
 $w_{l1} = 0.9$, what force several parameters to be zero. Only 6\% of the
-variables ended to be non null. The result was interesting because all the non
-zero coefficients were related to interactions with the {\tt year} variable.
+variables ended to be non null. All the non zero coefficients were related to interactions with the {\tt year} variable.
 This is related to Figure \ref{fig:time-series-gases-year}. $R^2$ in the test
 set was 0.838, a few more than the simple linear regression. The histogram of
 the residuals are similar to Figure \ref{fig:histogram-residuals-slr}, and
@@ -177,10 +175,6 @@ set did not improve.
 
 \vspace{2mm}
 
-The problem with this approach is the absence of a predictive frame. Despite
-estimating the parameters, the prediction is not straightforward since the
-data has missing values. To handle this problem, the data with imputation (as
-explained in Section \ref{sec:data-preprocessing}) served to predict values.
 The first thing we should note is that the parameters are different from
 the linear regression with fixed imputation, but not so much. The ratio
 between the estimated parameters ranged according to Figure
@@ -215,7 +209,7 @@ the range in y axis goes from 0.2 to 0.36 to emphasize the difference.
     \label{fig:model-comparison-ozone-tijuca}
 \end{figure}
 
-\subsubsection{CO}
+\subsubsection{Carbon monoxide}
 
 {\em Simple linear regression}
 
@@ -374,7 +368,7 @@ the range in y axis goes from 0.2 to 0.36 to emphasize the difference.
 \end{figure}
 
 
-\subsubsection{PM\texorpdfstring{$_{10}$}{10}}
+\subsubsection{Particulate matter 10}
 
 {\em Simple linear regression}
 
@@ -386,7 +380,7 @@ large t-statistic (absolute value more than
 20) was, in
 order, CO lag 1, PM$_{10}$ with 24 moving average, CO with lag
 2, and O$_{3}$ lag 1. This indicates that the model is very poor when only
-using the meterological variables. 7 features had p-value
+using the meteorological variables. 7 features had p-value
 greater that 0.05, a lot when compared to the previous models. The F-statistic considering all variables was practically zero. Figure \ref{fig:histogram-residuals-pm10-slr} shows
 the histogram of the residuals very similar to a normal distribution (as
 assumed by the model).The kurtosis was greater than 3, while the skewness around
@@ -495,7 +489,7 @@ the range in y axis goes from 0.2 to 0.4 to emphasize the difference.
     \label{fig:model-comparison-pm10-tijuca}
 \end{figure}
 
-\subsubsection{AQI}
+\subsubsection{Air quality index prediction}
 
 In order to predict AQI, we use the best model for each pollutant
 chosen previously and calculate it as explained in Section
@@ -520,14 +514,14 @@ presents the observed groups, which includes bad quality.
 
 \begin{figure}
     \centering
-    \includegraphics[width = 0.4\textwidth]{aiq-time.eps}
+    \includegraphics[width = 0.36\textwidth]{aiq-time.eps}
     \caption{Composition of AQI classes predicted in Tijuca: Year-based and Month-based.}
     \label{fig:aqitime}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width = 0.4\textwidth]{aiq-time-observed.eps}
+    \includegraphics[width = 0.36\textwidth]{aiq-time-observed.eps}
     \caption{Composition of AQI classes observed in Tijuca: Year-based and Month-based.}
     \label{fig:aqitime-observed}
 \end{figure}
@@ -582,6 +576,47 @@ had similar behavior.
 \section{Discussion and future work}
 \label{sec:discussion}
 
+All the models had a bad behavior of underestimate the pollutant values. One
+possible way to handle this problem would be to weight error above and below
+the observed differently. For instance, if the estimate is above the observed
+value, the weight will be larger, and if is below, it will be smaller. Besides
+that problem, the results were quite interesting, specially for ozone and
+carbon monoxide. Particulate matter had the worst results in general, so other
+endogenous variables should be considered. Other important consideration is
+the computation time. Considering all the process, more than 12 hours of CPU
+time running the Jupyter Notebooks, even with the simplifications. The
+relation between the pollutants and the meteorological was overestimated by us
+previously. It seems that the lag variables from the pollutants are very
+important. Perhaps more specific functions of these variables should be
+modeled. 
+
+Some possible extensions and subproducts: 
+
+\begin{enumerate}
+    \item Daily predictions: here the daily predictions were not good and were
+    disregarded; 
+    \item Traffic car variable: other works showed the importance of this
+    variable; 
+    \item Prediction of non monitored locations: this is a subproduct of the
+    models not explored. 
+\end{enumerate}
 
 \section{Conclusion}
 \label{sec:conclusion}
+
+Air quality forecast is a hard task as mentioned in Section
+\ref{sec:polluting-gases} given the complex interactions. On the other hand,
+the ability to estimate these quantities (or even control it!) is becoming
+more important in urban areas since the impacts on the community and the
+environment. This work presentes a study of some models to forecast
+pollutants' levels and AQI. It produced a suitable hourly model with a
+reasonable accuracy for each monitoring station in RIo de Janeiro.
+
+\section{Code and data availability}
+
+The data and code are open source. The data is available at
+\cite{dataset-rio-ar-quality}, while the code are available at Github
+repository\footnote{\url{https://github.com/lucasmoschen/machine-learning-project}}.
+All the codes are separated by Jupyter Notebooks, describing all the steps:
+EDA, Data Engineering, Models for O3, CO, PM10, and AIQ, and an Aggregated
+model. 
