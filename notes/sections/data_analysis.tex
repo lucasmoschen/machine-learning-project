@@ -328,7 +328,9 @@ the above processes is 32 including meteorological conditions, time-related,
 lags, moving averages, 
 and pollutants measurements.
 
-\com{Given the high dimensionality (27 independent variables), a principal
-component analysis (PCA) was applied to compare the results when the whole
-dataset is used. This is done only to verify if all the variables really help
-the forecasting.}
+\begin{remark}
+    The first 5 variables in PCA decomposition had more than 0.9 of explained
+    variance. However, their $R^2$ score in Linear Regression was 0.616, much
+    lower than the Linear Regression case explained posteriorly. For that
+    reason, we ignore the reduced dataset by PCA.  
+\end{remark}
